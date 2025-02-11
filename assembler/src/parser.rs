@@ -211,4 +211,17 @@ mod test {
 
         assert_eq!(instruction_type, "99");
     }
+
+    #[test]
+    fn symbol_return_l_instruction() {
+        let mut parser = Parser {
+            lines: vec!["    (WHITE)".to_string()],
+            now_line: 1,
+            instruction: "    (WHITE)".to_string(),
+        };
+
+        let instruction_type = parser.symbol();
+
+        assert_eq!(instruction_type, "WHITE");
+    }
 }
