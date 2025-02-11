@@ -46,6 +46,24 @@ impl Code {
             _ => panic!("invalid jump: {:}", jump),
         }
     }
+
+    fn comp(&self, comp: &str) -> String {
+        todo!();
+        if comp.is_empty() {
+            return "000".to_string();
+        }
+
+        match comp {
+            "JGT" => "001".to_string(),
+            "JEQ" => "010".to_string(),
+            "JGE" => "011".to_string(),
+            "JLT" => "100".to_string(),
+            "JNE" => "101".to_string(),
+            "JLE" => "110".to_string(),
+            "JMP" => "111".to_string(),
+            _ => panic!("invalid jump: {:}", comp),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -104,5 +122,14 @@ mod test {
         let result = code.jump("JLE");
 
         assert_eq!(result, "110");
+    }
+
+    #[test]
+    fn comp_a_plus_one_return_0110111() {
+        let code = Code;
+
+        let result = code.comp("A+1");
+
+        assert_eq!(result, "0110111");
     }
 }
