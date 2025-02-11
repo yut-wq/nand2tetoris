@@ -1,12 +1,14 @@
 use regex::Regex;
 use std::{fs::File, io::Read};
 
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash)]
 enum InstructionType {
     AInstruction,
     CInstruction,
     LInstruction,
 }
 
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Default)]
 pub struct Parser {
     pub lines: Vec<String>,
     now_line: usize,
@@ -135,5 +137,18 @@ mod test {
 
         assert_eq!(parser.now_line, 2);
         assert_eq!(parser.instruction, "    @99".to_string());
+    }
+
+    #[test]
+    fn instruction_type_return_a_instruction() {
+        let mut parser = Parser {
+            lines: vec!["    @99".to_string()],
+            now_line: 1,
+            instruction: "    @99".to_string(),
+        };
+
+        let instruction_type = parser.instruction_type();
+
+        assert_eq!(instruction_type, InstructionType::AInstruction);
     }
 }
