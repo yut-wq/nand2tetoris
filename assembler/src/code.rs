@@ -3,6 +3,9 @@ pub struct Code;
 
 impl Code {
     fn dest(&self, dest: &str) -> String {
+        if dest.is_empty() {
+            return "000".to_string();
+        }
         todo!();
     }
 }
