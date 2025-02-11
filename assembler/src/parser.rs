@@ -258,4 +258,17 @@ mod test {
 
         assert_eq!(instruction_type, "D");
     }
+
+    #[test]
+    fn dest_return_null() {
+        let mut parser = Parser {
+            lines: vec!["    D;JMP".to_string()],
+            now_line: 1,
+            instruction: "    D;JMP".to_string(),
+        };
+
+        let instruction_type = parser.dest();
+
+        assert_eq!(instruction_type, "null");
+    }
 }
