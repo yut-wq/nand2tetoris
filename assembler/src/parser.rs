@@ -40,6 +40,10 @@ impl Parser {
     fn instruction_type(&self) -> InstructionType {
         todo!();
     }
+
+    fn symbol(&self) -> String {
+        todo!()
+    }
 }
 
 #[cfg(test)]
