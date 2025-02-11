@@ -155,4 +155,17 @@ mod test {
 
         assert_eq!(instruction_type, InstructionType::AInstruction);
     }
+
+    #[test]
+    fn instruction_type_return_l_instruction() {
+        let mut parser = Parser {
+            lines: vec!["    (WHITE)".to_string()],
+            now_line: 1,
+            instruction: "    (WHITE)".to_string(),
+        };
+
+        let instruction_type = parser.instruction_type();
+
+        assert_eq!(instruction_type, InstructionType::LInstruction);
+    }
 }
