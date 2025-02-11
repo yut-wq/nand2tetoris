@@ -64,8 +64,13 @@ impl Parser {
     /// 現在の命令タイプを返す
     fn instruction_type(&self) -> InstructionType {
         let a_instruction = Regex::new(r"\s*@\d+\s*").unwrap();
+        let l_instruction = Regex::new(r"\s*\(\w+\)\s*").unwrap();
+
         if a_instruction.captures(&self.instruction).is_some() {
             return InstructionType::AInstruction;
+        }
+        if l_instruction.captures(&self.instruction).is_some() {
+            return InstructionType::LInstruction;
         }
         todo!();
     }
