@@ -96,4 +96,13 @@ mod test {
 
         assert_eq!(result, "001");
     }
+
+    #[test]
+    fn jump_jle_return_one_one_zero() {
+        let code = Code;
+
+        let result = code.jump("JLE");
+
+        assert_eq!(result, "110");
+    }
 }
