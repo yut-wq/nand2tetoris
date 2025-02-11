@@ -41,23 +41,19 @@ impl Parser {
 
     /// 次の命令を読み込む
     fn advance(&mut self) {
-        loop {
-            if self.has_more_line() {
-                let now_line = &self.lines[self.now_line];
-                let now_line = now_line.trim_start();
+        while self.has_more_line() {
+            let now_line = &self.lines[self.now_line];
+            let now_line = now_line.trim_start();
 
-                // 空白の場合はnow_lineだけを進める
-                if now_line.is_empty() {
-                    self.now_line += 1;
-                    continue;
-                }
-
-                self.instruction = self.lines[self.now_line].clone();
+            // 空白の場合はnow_lineだけを進める
+            if now_line.is_empty() {
                 self.now_line += 1;
-                break;
-            } else {
-                break;
+                continue;
             }
+
+            self.instruction = self.lines[self.now_line].clone();
+            self.now_line += 1;
+            break;
         }
     }
 
