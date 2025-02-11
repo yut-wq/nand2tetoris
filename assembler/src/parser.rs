@@ -55,10 +55,9 @@ impl Parser {
 
             // コメントの場合はnow_lineだけを進める
             let is_comment = comment.captures(now_line).is_some();
-            if is_comment{
+            if is_comment {
                 self.now_line += 1;
                 continue;
-
             }
 
             self.instruction = self.lines[self.now_line].clone();
@@ -134,7 +133,7 @@ mod test {
     #[test]
     fn advance_ignore_comment() {
         let mut parser = Parser {
-            lines: vec!["// this is comment".to_string(), "    @99".to_string()],
+            lines: vec!["  // this is comment".to_string(), "    @99".to_string()],
             now_line: 0,
             instruction: String::new(),
         };
