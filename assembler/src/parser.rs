@@ -76,7 +76,19 @@ impl Parser {
     }
 
     fn symbol(&self) -> String {
-        todo!()
+        // 現在の命令で分岐
+        let instruction_type = self.instruction_type();
+        match instruction_type {
+            InstructionType::AInstruction => {
+                let symbol = Regex::new(r"\s*@(\d+)\s*").unwrap();
+                let Some(symbol) = symbol.captures(&self.instruction) else {
+                    return "".to_string();
+                };
+                symbol[1].to_string()
+            }
+            InstructionType::CInstruction => todo!(),
+            InstructionType::LInstruction => todo!(),
+        }
     }
 }
 
