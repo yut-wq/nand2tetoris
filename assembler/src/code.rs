@@ -22,4 +22,13 @@ mod test {
 
         assert_eq!(result, "000");
     }
+
+    #[test]
+    fn dest_m_return_zero_zero_one() {
+        let code = Code;
+
+        let result = code.dest("M");
+
+        assert_eq!(result, "001");
+    }
 }
