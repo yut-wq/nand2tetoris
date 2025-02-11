@@ -34,7 +34,10 @@ impl Parser {
         self.now_line < line_counts
     }
 
-    fn advance(&self) {}
+    /// 次の命令を読み込む
+    fn advance(&mut self) {
+        self.now_line += 1;
+    }
 
     /// 現在の命令タイプを返す
     fn instruction_type(&self) -> InstructionType {
@@ -68,5 +71,17 @@ mod test {
         };
 
         assert!(!parser.has_more_line());
+    }
+
+    #[test]
+    fn advance_return_next_operation() {
+        let mut parser = Parser {
+            lines: vec!["    @99".to_string()],
+            now_line: 0,
+        };
+
+        parser.advance();
+
+        assert_eq!(parser.now_line, 1);
     }
 }
