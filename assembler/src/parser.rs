@@ -1,5 +1,11 @@
 use std::{fs::File, io::Read};
 
+enum InstructionType {
+    AInstruction,
+    CInstruction,
+    LInstruction,
+}
+
 pub struct Parser {
     pub lines: Vec<String>,
     now_line: usize,
@@ -28,7 +34,11 @@ impl Parser {
         self.now_line < line_counts
     }
 
-    fn advance(&self) {
+    fn advance(&self) {}
+
+    /// 現在の命令タイプを返す
+    fn instruction_type(&self) -> InstructionType {
+        todo!();
     }
 }
 
