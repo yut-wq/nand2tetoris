@@ -118,12 +118,11 @@ impl Parser {
             InstructionType::AInstruction => todo!(),
             InstructionType::LInstruction => todo!(),
             InstructionType::CInstruction => {
-                todo!()
-                // let dest = Regex::new(r"\s*(\w+)\s*\=.*").unwrap();
-                // let Some(dest) = dest.captures(&self.instruction) else {
-                //     return "null".to_string();
-                // };
-                // dest[1].to_string()
+                let after_dest = Regex::new(r"\s*\w+\s*\=\s*([^\s]+)[(\s*)|(;.+)]").unwrap();
+                let Some(comp) = after_dest.captures(&self.instruction) else {
+                    panic!("no comp. invalid.")
+                };
+                comp[1].to_string()
             }
         }
     }
