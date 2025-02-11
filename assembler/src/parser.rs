@@ -87,7 +87,13 @@ impl Parser {
                 symbol[1].to_string()
             }
             InstructionType::CInstruction => todo!(),
-            InstructionType::LInstruction => todo!(),
+            InstructionType::LInstruction => {
+                let symbol = Regex::new(r"\s*\((\w+)\)\s*").unwrap();
+                let Some(symbol) = symbol.captures(&self.instruction) else {
+                    return "".to_string();
+                };
+                symbol[1].to_string()
+            }
         }
     }
 }
