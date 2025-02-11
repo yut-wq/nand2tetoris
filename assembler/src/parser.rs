@@ -120,4 +120,18 @@ mod test {
         assert_eq!(parser.now_line, 2);
         assert_eq!(parser.instruction, "    @99".to_string());
     }
+
+    #[test]
+    fn advance_ignore_comment() {
+        let mut parser = Parser {
+            lines: vec!["// this is comment".to_string(), "    @99".to_string()],
+            now_line: 0,
+            instruction: String::new(),
+        };
+
+        parser.advance();
+
+        assert_eq!(parser.now_line, 2);
+        assert_eq!(parser.instruction, "    @99".to_string());
+    }
 }
