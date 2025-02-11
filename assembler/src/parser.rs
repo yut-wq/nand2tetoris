@@ -27,6 +27,9 @@ impl Parser {
         let line_counts = self.lines.len();
         self.now_line < line_counts
     }
+
+    fn advance(&self) {
+    }
 }
 
 #[cfg(test)]
