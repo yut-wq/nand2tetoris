@@ -35,27 +35,16 @@ impl Code {
             return "000".to_string();
         }
 
-        let mut bin_code = String::new();
-
-        // if jump.contains("A") {
-        //     bin_code.push('1')
-        // } else {
-        //     bin_code.push('0');
-        // }
-        //
-        // if jump.contains("D") {
-        //     bin_code.push('1')
-        // } else {
-        //     bin_code.push('0');
-        // }
-        //
-        // if jump.contains("M") {
-        //     bin_code.push('1')
-        // } else {
-        //     bin_code.push('0');
-        // }
-
-        bin_code
+        match jump {
+            "JGT" => "001".to_string(),
+            "JEQ" => "010".to_string(),
+            "JGE" => "011".to_string(),
+            "JLT" => "100".to_string(),
+            "JNE" => "101".to_string(),
+            "JLE" => "110".to_string(),
+            "JMP" => "111".to_string(),
+            _ => panic!("invalid jump: {:}", jump),
+        }
     }
 }
 
