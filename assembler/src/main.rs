@@ -1,5 +1,7 @@
-use assembler::run;
+use assembler::{parser::Parser, run};
 
 fn main() {
-    run()
+    // run()
+    let parser = Parser::new("test.txt");
+    println!("{:?}", parser.lines);
 }
