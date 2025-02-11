@@ -48,20 +48,37 @@ impl Code {
     }
 
     fn comp(&self, comp: &str) -> String {
-        todo!();
-        if comp.is_empty() {
-            return "000".to_string();
-        }
-
         match comp {
-            "JGT" => "001".to_string(),
-            "JEQ" => "010".to_string(),
-            "JGE" => "011".to_string(),
-            "JLT" => "100".to_string(),
-            "JNE" => "101".to_string(),
-            "JLE" => "110".to_string(),
-            "JMP" => "111".to_string(),
-            _ => panic!("invalid jump: {:}", comp),
+            "0" =>   "0101010".to_string(),
+            "1" =>   "0111111".to_string(),
+            "-1" =>  "0111010".to_string(),
+            "D" =>   "0001100".to_string(),
+            "A" =>   "0110000".to_string(),
+            "!D" =>  "0001101".to_string(),
+            "!A" =>  "0110001".to_string(),
+            "-D" =>  "0001111".to_string(),
+            "-A" =>  "0110011".to_string(),
+            "D+1" => "0011111".to_string(),
+            "A+1" => "0110111".to_string(),
+            "D-1" => "0001110".to_string(),
+            "A-1" => "0110010".to_string(),
+            "D+A" => "0000010".to_string(),
+            "D-A" => "0010011".to_string(),
+            "A-D" => "0000111".to_string(),
+            "D&A" => "0000000".to_string(),
+            "D|A" => "0010101".to_string(),
+
+            "M" =>   "1110000".to_string(),
+            "!M" =>  "1110001".to_string(),
+            "-M" =>  "1110011".to_string(),
+            "M+1" => "1110111".to_string(),
+            "M-1" => "1110010".to_string(),
+            "D+M" => "1000010".to_string(),
+            "D-M" => "1010011".to_string(),
+            "M-D" => "1000111".to_string(),
+            "D&M" => "1000000".to_string(),
+            "D|M" => "1010101".to_string(),
+            _ => panic!("invalid comp: {:}", comp),
         }
     }
 }
