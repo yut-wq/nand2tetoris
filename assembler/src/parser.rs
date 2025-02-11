@@ -1,3 +1,4 @@
+use regex::Regex;
 use std::{fs::File, io::Read};
 
 enum InstructionType {
@@ -41,6 +42,7 @@ impl Parser {
 
     /// 次の命令を読み込む
     fn advance(&mut self) {
+        let comment = Regex::new(r"\s*//.*").unwrap();
         while self.has_more_line() {
             let now_line = &self.lines[self.now_line];
             let now_line = now_line.trim_start();
@@ -49,6 +51,14 @@ impl Parser {
             if now_line.is_empty() {
                 self.now_line += 1;
                 continue;
+            }
+
+            // コメントの場合はnow_lineだけを進める
+            let is_comment = comment.captures(now_line).is_some();
+            if is_comment{
+                self.now_line += 1;
+                continue;
+
             }
 
             self.instruction = self.lines[self.now_line].clone();
