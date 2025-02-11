@@ -186,4 +186,17 @@ mod test {
 
         assert_eq!(instruction_type, InstructionType::CInstruction);
     }
+
+    #[test]
+    fn symbol_return_a_instruction() {
+        let mut parser = Parser {
+            lines: vec!["    @99".to_string()],
+            now_line: 1,
+            instruction: "    @99".to_string(),
+        };
+
+        let instruction_type = parser.symbol();
+
+        assert_eq!(instruction_type, "99");
+    }
 }
