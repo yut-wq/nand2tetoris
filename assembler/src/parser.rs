@@ -105,7 +105,7 @@ impl Parser {
             InstructionType::CInstruction => {
                 let dest = Regex::new(r"\s*(\w+)\s*\=.*").unwrap();
                 let Some(dest) = dest.captures(&self.instruction) else {
-                    return "null".to_string();
+                    return "".to_string();
                 };
                 dest[1].to_string()
             }
@@ -290,7 +290,7 @@ mod test {
     }
 
     #[test]
-    fn dest_return_null() {
+    fn dest_return_empty() {
         let mut parser = Parser {
             lines: vec!["    D;JMP".to_string()],
             now_line: 1,
@@ -299,7 +299,7 @@ mod test {
 
         let instruction_type = parser.dest();
 
-        assert_eq!(instruction_type, "null");
+        assert_eq!(instruction_type, "");
     }
 
     #[test]
