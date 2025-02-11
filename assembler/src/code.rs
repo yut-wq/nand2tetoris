@@ -6,7 +6,28 @@ impl Code {
         if dest.is_empty() {
             return "000".to_string();
         }
-        todo!();
+
+        let mut bin_code = String::new();
+
+        if dest.contains("A") {
+            bin_code.push('1')
+        } else {
+            bin_code.push('0');
+        }
+
+        if dest.contains("D") {
+            bin_code.push('1')
+        } else {
+            bin_code.push('0');
+        }
+
+        if dest.contains("M") {
+            bin_code.push('1')
+        } else {
+            bin_code.push('0');
+        }
+
+        bin_code
     }
 }
 
@@ -30,5 +51,14 @@ mod test {
         let result = code.dest("M");
 
         assert_eq!(result, "001");
+    }
+
+    #[test]
+    fn dest_ad_return_one_one_zero() {
+        let code = Code;
+
+        let result = code.dest("AD");
+
+        assert_eq!(result, "110");
     }
 }
