@@ -31,30 +31,29 @@ impl Code {
     }
 
     fn jump(&self, jump: &str) -> String {
-        todo!();
         if jump.is_empty() {
             return "000".to_string();
         }
 
         let mut bin_code = String::new();
 
-        if jump.contains("A") {
-            bin_code.push('1')
-        } else {
-            bin_code.push('0');
-        }
-
-        if jump.contains("D") {
-            bin_code.push('1')
-        } else {
-            bin_code.push('0');
-        }
-
-        if jump.contains("M") {
-            bin_code.push('1')
-        } else {
-            bin_code.push('0');
-        }
+        // if jump.contains("A") {
+        //     bin_code.push('1')
+        // } else {
+        //     bin_code.push('0');
+        // }
+        //
+        // if jump.contains("D") {
+        //     bin_code.push('1')
+        // } else {
+        //     bin_code.push('0');
+        // }
+        //
+        // if jump.contains("M") {
+        //     bin_code.push('1')
+        // } else {
+        //     bin_code.push('0');
+        // }
 
         bin_code
     }
