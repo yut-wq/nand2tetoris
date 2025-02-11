@@ -67,12 +67,12 @@ impl Parser {
         let l_instruction = Regex::new(r"\s*\(\w+\)\s*").unwrap();
 
         if a_instruction.captures(&self.instruction).is_some() {
-            return InstructionType::AInstruction;
+            InstructionType::AInstruction
+        } else if l_instruction.captures(&self.instruction).is_some() {
+            InstructionType::LInstruction
+        } else {
+            InstructionType::CInstruction
         }
-        if l_instruction.captures(&self.instruction).is_some() {
-            return InstructionType::LInstruction;
-        }
-        todo!();
     }
 
     fn symbol(&self) -> String {
@@ -172,5 +172,18 @@ mod test {
         let instruction_type = parser.instruction_type();
 
         assert_eq!(instruction_type, InstructionType::LInstruction);
+    }
+
+    #[test]
+    fn instruction_type_return_c_instruction() {
+        let mut parser = Parser {
+            lines: vec!["    D=D+1;JLE".to_string()],
+            now_line: 1,
+            instruction: "    D=D+1;JLE".to_string(),
+        };
+
+        let instruction_type = parser.instruction_type();
+
+        assert_eq!(instruction_type, InstructionType::CInstruction);
     }
 }
