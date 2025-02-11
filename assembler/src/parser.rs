@@ -9,6 +9,7 @@ enum InstructionType {
 pub struct Parser {
     pub lines: Vec<String>,
     now_line: usize,
+    instruction: String,
 }
 
 impl Parser {
@@ -26,7 +27,11 @@ impl Parser {
             lines.push(line.to_string());
         }
 
-        Self { lines, now_line: 0 }
+        Self {
+            lines,
+            now_line: 0,
+            instruction: String::new(),
+        }
     }
 
     fn has_more_line(&self) -> bool {
@@ -36,7 +41,10 @@ impl Parser {
 
     /// 次の命令を読み込む
     fn advance(&mut self) {
-        self.now_line += 1;
+        if self.has_more_line() {
+            self.instruction = self.lines[self.now_line].clone();
+            self.now_line += 1;
+        }
     }
 
     /// 現在の命令タイプを返す
@@ -58,6 +66,7 @@ mod test {
         let parser = Parser {
             lines: vec!["test".to_string()],
             now_line: 0,
+            instruction: String::new(),
         };
 
         assert!(parser.has_more_line());
@@ -68,6 +77,7 @@ mod test {
         let parser = Parser {
             lines: vec!["test".to_string()],
             now_line: 1,
+            instruction: String::new(),
         };
 
         assert!(!parser.has_more_line());
@@ -78,10 +88,26 @@ mod test {
         let mut parser = Parser {
             lines: vec!["    @99".to_string()],
             now_line: 0,
+            instruction: String::new(),
         };
 
         parser.advance();
 
         assert_eq!(parser.now_line, 1);
+        assert_eq!(parser.instruction, "    @99".to_string());
+    }
+
+    #[test]
+    fn advance_ignore_space() {
+        let mut parser = Parser {
+            lines: vec![" ".to_string(), "    @99".to_string()],
+            now_line: 0,
+            instruction: String::new(),
+        };
+
+        parser.advance();
+
+        assert_eq!(parser.now_line, 2);
+        assert_eq!(parser.instruction, "    @99".to_string());
     }
 }
