@@ -47,15 +47,8 @@ impl Parser {
             let now_line = &self.lines[self.now_line];
             let now_line = now_line.trim_start();
 
-            // 空白の場合はnow_lineだけを進める
-            if now_line.is_empty() {
-                self.now_line += 1;
-                continue;
-            }
-
-            // コメントの場合はnow_lineだけを進める
             let is_comment = comment.captures(now_line).is_some();
-            if is_comment {
+            if now_line.is_empty() || is_comment {
                 self.now_line += 1;
                 continue;
             }
