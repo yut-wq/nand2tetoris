@@ -366,4 +366,17 @@ mod test {
 
         assert_eq!(instruction_type, "JLE");
     }
+
+    #[test]
+    fn jump_no_jump() {
+        let mut parser = Parser {
+            lines: vec!["    D=D+1".to_string()],
+            now_line: 1,
+            instruction: "    D=D+1".to_string(),
+        };
+
+        let instruction_type = parser.jump();
+
+        assert_eq!(instruction_type, "");
+    }
 }
