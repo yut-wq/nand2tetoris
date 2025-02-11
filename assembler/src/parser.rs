@@ -118,8 +118,8 @@ impl Parser {
             InstructionType::AInstruction => todo!(),
             InstructionType::LInstruction => todo!(),
             InstructionType::CInstruction => {
-                let after_dest = Regex::new(r"\s*(\w+\s*=+\s*|)([^\s]+)[(\s*)|(;.+)]").unwrap();
-                let Some(comp) = after_dest.captures(&self.instruction) else {
+                let comp = Regex::new(r"\s*(\w+\s*=\s*|)([^\s;]+)(;.+|\s*)").unwrap();
+                let Some(comp) = comp.captures(&self.instruction) else {
                     panic!("no comp. invalid.")
                 };
                 comp[2].to_string()
@@ -311,5 +311,18 @@ mod test {
         let instruction_type = parser.comp();
 
         assert_eq!(instruction_type, "D+1");
+    }
+
+    #[test]
+    fn comp_no_jmp() {
+        let mut parser = Parser {
+            lines: vec!["    D=A+1".to_string()],
+            now_line: 1,
+            instruction: "    D=A+1".to_string(),
+        };
+
+        let instruction_type = parser.comp();
+
+        assert_eq!(instruction_type, "A+1");
     }
 }
