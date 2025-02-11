@@ -98,4 +98,13 @@ mod test {
 
         assert_eq!(result, "000");
     }
+
+    #[test]
+    fn jump_jgt_return_zero_zero_one() {
+        let code = Code;
+
+        let result = code.jump("JGT");
+
+        assert_eq!(result, "001");
+    }
 }
