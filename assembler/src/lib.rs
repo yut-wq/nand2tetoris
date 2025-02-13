@@ -21,10 +21,6 @@ pub fn run(file_name: &str) {
     // parse処理
     while parser.has_more_line() {
         parser.advance();
-        if !parser.has_more_line() {
-            println!("finish.");
-            break;
-        }
 
         let instruction_type = parser.instruction_type();
         match instruction_type {
@@ -50,4 +46,6 @@ pub fn run(file_name: &str) {
             parser::InstructionType::LInstruction => todo!(),
         }
     }
+
+    println!("finish");
 }
