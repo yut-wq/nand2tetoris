@@ -3,8 +3,9 @@ use parser::Parser;
 use regex::Regex;
 use std::{fs::File, io::Write};
 
-pub mod code;
-pub mod parser;
+mod code;
+mod parser;
+mod symbol_table;
 
 pub fn run(file_name: &str) {
     // parserの作成
