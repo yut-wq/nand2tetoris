@@ -217,9 +217,9 @@ mod test {
     #[test]
     fn instruction_type_return_a_instruction() {
         let parser = Parser {
-            lines: vec!["    @99".to_string()],
+            lines: vec!["  @R0".to_string()],
             now_line: 1,
-            instruction: "    @99".to_string(),
+            instruction: "  @R0".to_string(),
         };
 
         let instruction_type = parser.instruction_type();
