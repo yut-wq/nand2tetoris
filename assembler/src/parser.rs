@@ -11,7 +11,7 @@ pub enum InstructionType {
 
 lazy_static! {
     static ref COMMENT: Regex = Regex::new(r"\s*//.*").unwrap();
-    static ref A_INSTRUCTION: Regex = Regex::new(r"\s*@\d+\s*").unwrap();
+    static ref A_INSTRUCTION: Regex = Regex::new(r"\s*@\w+\s*").unwrap();
     static ref L_INSTRUCTION: Regex = Regex::new(r"\s*\(\w+\)\s*").unwrap();
     static ref A_INSTRUCTION_SYMBOL: Regex = Regex::new(r"\s*@(\d+)\s*").unwrap();
     static ref L_INSTRUCTION_SYMBOL: Regex = Regex::new(r"\s*\((\w+)\)\s*").unwrap();
