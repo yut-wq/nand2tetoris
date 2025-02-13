@@ -18,7 +18,8 @@ impl SymbolTable {
     }
 
     pub fn get_address(&self, symbol: &str) -> u16 {
-        todo!()
+        let SymbolTable(table) = self;
+        *table.get(symbol).unwrap()
     }
 }
 
