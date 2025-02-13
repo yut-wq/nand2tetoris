@@ -241,6 +241,19 @@ mod test {
     }
 
     #[test]
+    fn instruction_type_include_dot_return_l_instruction() {
+        let parser = Parser {
+            lines: vec!["    (ball.new)".to_string()],
+            now_line: 1,
+            instruction: "    (ball.new)".to_string(),
+        };
+
+        let instruction_type = parser.instruction_type();
+
+        assert_eq!(instruction_type, InstructionType::LInstruction);
+    }
+
+    #[test]
     fn instruction_type_return_c_instruction() {
         let parser = Parser {
             lines: vec!["    D=D+1;JLE".to_string()],
