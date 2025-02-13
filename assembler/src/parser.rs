@@ -213,7 +213,7 @@ mod test {
 
     #[test]
     fn instruction_type_return_a_instruction() {
-        let mut parser = Parser {
+        let parser = Parser {
             lines: vec!["    @99".to_string()],
             now_line: 1,
             instruction: "    @99".to_string(),
@@ -226,7 +226,7 @@ mod test {
 
     #[test]
     fn instruction_type_return_l_instruction() {
-        let mut parser = Parser {
+        let parser = Parser {
             lines: vec!["    (WHITE)".to_string()],
             now_line: 1,
             instruction: "    (WHITE)".to_string(),
@@ -239,7 +239,7 @@ mod test {
 
     #[test]
     fn instruction_type_return_c_instruction() {
-        let mut parser = Parser {
+        let parser = Parser {
             lines: vec!["    D=D+1;JLE".to_string()],
             now_line: 1,
             instruction: "    D=D+1;JLE".to_string(),
@@ -252,131 +252,131 @@ mod test {
 
     #[test]
     fn symbol_return_a_instruction() {
-        let mut parser = Parser {
+        let parser = Parser {
             lines: vec!["    @99".to_string()],
             now_line: 1,
             instruction: "    @99".to_string(),
         };
 
-        let instruction_type = parser.symbol();
+        let symbol = parser.symbol();
 
-        assert_eq!(instruction_type, "99");
+        assert_eq!(symbol, "99");
     }
 
     #[test]
     fn symbol_return_l_instruction() {
-        let mut parser = Parser {
+        let parser = Parser {
             lines: vec!["    (WHITE)".to_string()],
             now_line: 1,
             instruction: "    (WHITE)".to_string(),
         };
 
-        let instruction_type = parser.symbol();
+        let symbol = parser.symbol();
 
-        assert_eq!(instruction_type, "WHITE");
+        assert_eq!(symbol, "WHITE");
     }
 
     #[test]
     fn dest_return_dest() {
-        let mut parser = Parser {
+        let parser = Parser {
             lines: vec!["    D=D+1;JLE".to_string()],
             now_line: 1,
             instruction: "    D=D+1;JLE".to_string(),
         };
 
-        let instruction_type = parser.dest();
+        let dest = parser.dest();
 
-        assert_eq!(instruction_type, "D");
+        assert_eq!(dest, "D");
     }
 
     #[test]
     fn dest_return_empty() {
-        let mut parser = Parser {
+        let parser = Parser {
             lines: vec!["    D;JMP".to_string()],
             now_line: 1,
             instruction: "    D;JMP".to_string(),
         };
 
-        let instruction_type = parser.dest();
+        let dest = parser.dest();
 
-        assert_eq!(instruction_type, "");
+        assert_eq!(dest, "");
     }
 
     #[test]
     fn comp_return_comp() {
-        let mut parser = Parser {
+        let parser = Parser {
             lines: vec!["    D=D+1;JLE".to_string()],
             now_line: 1,
             instruction: "    D=D+1;JLE".to_string(),
         };
 
-        let instruction_type = parser.comp();
+        let comp = parser.comp();
 
-        assert_eq!(instruction_type, "D+1");
+        assert_eq!(comp, "D+1");
     }
 
     #[test]
     fn comp_no_dest() {
-        let mut parser = Parser {
+        let parser = Parser {
             lines: vec!["    D+1;JLE".to_string()],
             now_line: 1,
             instruction: "    D+1;JLE".to_string(),
         };
 
-        let instruction_type = parser.comp();
+        let comp = parser.comp();
 
-        assert_eq!(instruction_type, "D+1");
+        assert_eq!(comp, "D+1");
     }
 
     #[test]
     fn comp_no_jmp() {
-        let mut parser = Parser {
+        let parser = Parser {
             lines: vec!["    D=A+1".to_string()],
             now_line: 1,
             instruction: "    D=A+1".to_string(),
         };
 
-        let instruction_type = parser.comp();
+        let comp = parser.comp();
 
-        assert_eq!(instruction_type, "A+1");
+        assert_eq!(comp, "A+1");
     }
 
     #[test]
     fn jump_return_jmp() {
-        let mut parser = Parser {
+        let parser = Parser {
             lines: vec!["    D=D+1;JLE".to_string()],
             now_line: 1,
             instruction: "    D=D+1;JLE".to_string(),
         };
 
-        let instruction_type = parser.jump();
+        let jump = parser.jump();
 
-        assert_eq!(instruction_type, "JLE");
+        assert_eq!(jump, "JLE");
     }
 
     #[test]
     fn jump_no_dest() {
-        let mut parser = Parser {
+        let parser = Parser {
             lines: vec!["    D+1;JLE".to_string()],
             now_line: 1,
             instruction: "    D+1;JLE".to_string(),
         };
 
-        let instruction_type = parser.jump();
+        let jump = parser.jump();
 
-        assert_eq!(instruction_type, "JLE");
+        assert_eq!(jump, "JLE");
     }
 
     #[test]
     fn jump_no_jump() {
-        let mut parser = Parser {
+        let parser = Parser {
             lines: vec!["    D=D+1".to_string()],
             now_line: 1,
             instruction: "    D=D+1".to_string(),
         };
 
-        let instruction_type = parser.jump();
+        let jump = parser.jump();
 
-        assert_eq!(instruction_type, "");
+        assert_eq!(jump, "");
     }
 }
