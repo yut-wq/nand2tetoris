@@ -31,16 +31,16 @@ pub fn run(file_name: &str) {
                 file.write_all(bin_code.as_bytes()).unwrap();
             }
             parser::InstructionType::CInstruction => {
-                let dest = parser.dest();
-                let dest = Code::dest(&dest);
-
                 let comp = parser.comp();
                 let comp = Code::comp(&comp);
+
+                let dest = parser.dest();
+                let dest = Code::dest(&dest);
 
                 let jump = parser.jump();
                 let jump = Code::jump(&jump);
 
-                let bin_code = format!("111{}{}{}\n", dest, comp, jump);
+                let bin_code = format!("111{}{}{}\n", comp, dest, jump);
                 file.write_all(bin_code.as_bytes()).unwrap();
             }
             parser::InstructionType::LInstruction => todo!(),
