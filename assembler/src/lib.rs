@@ -21,7 +21,7 @@ pub fn run(file_name: &str) {
     // parse処理
     while parser.has_more_line() {
         parser.advance();
-        if parser.has_more_line() {
+        if !parser.has_more_line() {
             println!("finish.");
             break;
         }
