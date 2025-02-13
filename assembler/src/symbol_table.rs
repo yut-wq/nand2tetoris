@@ -13,7 +13,8 @@ impl SymbolTable {
     }
 
     pub fn contains(&self, symbol: &str) -> bool {
-        todo!()
+        let SymbolTable(table) = self;
+        table.contains_key(symbol)
     }
 }
 
