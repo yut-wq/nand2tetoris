@@ -1,6 +1,53 @@
+use code::Code;
+use parser::Parser;
+use regex::Regex;
+use std::{fs::File, io::Write};
+
 pub mod code;
 pub mod parser;
 
 pub fn run(file_name: &str) {
-    println!("Hello, world!");
+    // parserの作成
+    let mut parser = Parser::new(file_name);
+
+    // ファイルの作成
+    let file_name_base = Regex::new(r"(.+)\..+").unwrap();
+    let Some(file_name_base) = file_name_base.captures(file_name) else {
+        panic!("invalid file name.");
+    };
+    let file_name_base = file_name_base[1].to_string();
+    let mut file = File::create(format!("{}.hack", file_name_base)).unwrap();
+
+    // parse処理
+    while parser.has_more_line() {
+        parser.advance();
+        if parser.has_more_line() {
+            println!("finish.");
+            break;
+        }
+
+        let instruction_type = parser.instruction_type();
+        match instruction_type {
+            parser::InstructionType::AInstruction => {
+                let symbol = parser.symbol();
+                let symbol: u16 = symbol.parse().unwrap();
+                let bin_code = format!("{:016b}\n", symbol);
+                file.write_all(bin_code.as_bytes()).unwrap();
+            }
+            parser::InstructionType::CInstruction => {
+                let dest = parser.dest();
+                let dest = Code::dest(&dest);
+
+                let comp = parser.comp();
+                let comp = Code::comp(&comp);
+
+                let jump = parser.jump();
+                let jump = Code::comp(&jump);
+
+                let bin_code = format!("111{}{}{}\n", dest, comp, jump);
+                file.write_all(bin_code.as_bytes()).unwrap();
+            }
+            parser::InstructionType::LInstruction => todo!(),
+        }
+    }
 }
