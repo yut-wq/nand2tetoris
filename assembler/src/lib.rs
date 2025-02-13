@@ -42,7 +42,7 @@ pub fn run(file_name: &str) {
                 let comp = Code::comp(&comp);
 
                 let jump = parser.jump();
-                let jump = Code::comp(&jump);
+                let jump = Code::jump(&jump);
 
                 let bin_code = format!("111{}{}{}\n", dest, comp, jump);
                 file.write_all(bin_code.as_bytes()).unwrap();
