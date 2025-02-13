@@ -1,7 +1,8 @@
-use assembler::{parser::Parser, run};
+use assembler::run;
+use std::env;
 
 fn main() {
-    // run()
-    let parser = Parser::new("test.txt");
-    println!("{:?}", parser.lines);
+    let args: Vec<String> = env::args().collect();
+    let file_name = &args[1];
+    run(file_name);
 }
