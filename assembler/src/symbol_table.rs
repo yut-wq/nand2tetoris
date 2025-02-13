@@ -16,6 +16,10 @@ impl SymbolTable {
         let SymbolTable(table) = self;
         table.contains_key(symbol)
     }
+
+    pub fn get_address(&self, symbol: &str) -> u16 {
+        todo!()
+    }
 }
 
 #[cfg(test)]
@@ -44,5 +48,18 @@ mod test {
         let table = SymbolTable(table);
 
         assert!(table.contains("Venus"));
+    }
+
+    #[test]
+    fn symbol_table_get_address() {
+        let table = HashMap::from([
+            ("Mercury".to_string(), 4),
+            ("Venus".to_string(), 7),
+            ("Earth".to_string(), 1),
+            ("Mars".to_string(), 15),
+        ]);
+        let table = SymbolTable(table);
+
+        assert_eq!(table.get_address("Earth"), 1);
     }
 }
