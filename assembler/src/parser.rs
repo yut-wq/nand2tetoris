@@ -1,3 +1,4 @@
+use lazy_static::lazy_static;
 use regex::Regex;
 use std::{fs::File, io::Read};
 
@@ -6,6 +7,17 @@ pub enum InstructionType {
     AInstruction,
     CInstruction,
     LInstruction,
+}
+
+lazy_static! {
+    static ref COMMENT: Regex = Regex::new(r"\s*//.*").unwrap();
+    static ref A_INSTRUCTION: Regex = Regex::new(r"\s*@\d+\s*").unwrap();
+    static ref L_INSTRUCTION: Regex = Regex::new(r"\s*\(\w+\)\s*").unwrap();
+    static ref A_INSTRUCTION_SYMBOL: Regex = Regex::new(r"\s*@(\d+)\s*").unwrap();
+    static ref L_INSTRUCTION_SYMBOL: Regex = Regex::new(r"\s*\((\w+)\)\s*").unwrap();
+    static ref DEST: Regex = Regex::new(r"\s*(\w+)\s*\=.*").unwrap();
+    static ref COMP: Regex = Regex::new(r"\s*(\w+\s*=\s*|)([^\s;]+)(;.+|\s*)").unwrap();
+    static ref JUMP: Regex = Regex::new(r".+;(\w+)").unwrap();
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Default)]
@@ -44,12 +56,11 @@ impl Parser {
 
     /// 次の命令を読み込む
     pub fn advance(&mut self) {
-        let comment = Regex::new(r"\s*//.*").unwrap();
         while self.has_more_line() {
             let now_line = &self.lines[self.now_line];
             let now_line = now_line.trim_start();
 
-            let is_comment = comment.captures(now_line).is_some();
+            let is_comment = COMMENT.captures(now_line).is_some();
             if now_line.is_empty() || is_comment {
                 self.now_line += 1;
                 continue;
@@ -63,12 +74,9 @@ impl Parser {
 
     /// 現在の命令タイプを返す
     pub fn instruction_type(&self) -> InstructionType {
-        let a_instruction = Regex::new(r"\s*@\d+\s*").unwrap();
-        let l_instruction = Regex::new(r"\s*\(\w+\)\s*").unwrap();
-
-        if a_instruction.captures(&self.instruction).is_some() {
+        if A_INSTRUCTION.captures(&self.instruction).is_some() {
             InstructionType::AInstruction
-        } else if l_instruction.captures(&self.instruction).is_some() {
+        } else if L_INSTRUCTION.captures(&self.instruction).is_some() {
             InstructionType::LInstruction
         } else {
             InstructionType::CInstruction
@@ -80,16 +88,14 @@ impl Parser {
         let instruction_type = self.instruction_type();
         match instruction_type {
             InstructionType::AInstruction => {
-                let symbol = Regex::new(r"\s*@(\d+)\s*").unwrap();
-                let Some(symbol) = symbol.captures(&self.instruction) else {
+                let Some(symbol) = A_INSTRUCTION_SYMBOL.captures(&self.instruction) else {
                     return "".to_string();
                 };
                 symbol[1].to_string()
             }
             InstructionType::CInstruction => todo!(),
             InstructionType::LInstruction => {
-                let symbol = Regex::new(r"\s*\((\w+)\)\s*").unwrap();
-                let Some(symbol) = symbol.captures(&self.instruction) else {
+                let Some(symbol) = L_INSTRUCTION_SYMBOL.captures(&self.instruction) else {
                     return "".to_string();
                 };
                 symbol[1].to_string()
@@ -103,8 +109,7 @@ impl Parser {
             InstructionType::AInstruction => todo!(),
             InstructionType::LInstruction => todo!(),
             InstructionType::CInstruction => {
-                let dest = Regex::new(r"\s*(\w+)\s*\=.*").unwrap();
-                let Some(dest) = dest.captures(&self.instruction) else {
+                let Some(dest) = DEST.captures(&self.instruction) else {
                     return "".to_string();
                 };
                 dest[1].to_string()
@@ -118,8 +123,7 @@ impl Parser {
             InstructionType::AInstruction => todo!(),
             InstructionType::LInstruction => todo!(),
             InstructionType::CInstruction => {
-                let comp = Regex::new(r"\s*(\w+\s*=\s*|)([^\s;]+)(;.+|\s*)").unwrap();
-                let Some(comp) = comp.captures(&self.instruction) else {
+                let Some(comp) = COMP.captures(&self.instruction) else {
                     panic!("no comp. invalid.")
                 };
                 comp[2].to_string()
@@ -133,8 +137,7 @@ impl Parser {
             InstructionType::AInstruction => todo!(),
             InstructionType::LInstruction => todo!(),
             InstructionType::CInstruction => {
-                let jump = Regex::new(r".+;(\w+)").unwrap();
-                let Some(jump) = jump.captures(&self.instruction) else {
+                let Some(jump) = JUMP.captures(&self.instruction) else {
                     return "".to_string();
                 };
                 jump[1].to_string()
