@@ -2,7 +2,7 @@ use regex::Regex;
 use std::{fs::File, io::Read};
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash)]
-enum InstructionType {
+pub enum InstructionType {
     AInstruction,
     CInstruction,
     LInstruction,
