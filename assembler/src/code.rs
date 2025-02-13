@@ -2,7 +2,7 @@
 pub struct Code;
 
 impl Code {
-    fn dest(dest: &str) -> String {
+    pub fn dest(dest: &str) -> String {
         if dest.is_empty() {
             return "000".to_string();
         }
@@ -30,7 +30,7 @@ impl Code {
         bin_code
     }
 
-    fn jump(jump: &str) -> String {
+    pub fn jump(jump: &str) -> String {
         if jump.is_empty() {
             return "000".to_string();
         }
@@ -47,7 +47,7 @@ impl Code {
         }
     }
 
-    fn comp(comp: &str) -> String {
+    pub fn comp(comp: &str) -> String {
         match comp {
             "0" => "0101010".to_string(),
             "1" => "0111111".to_string(),
