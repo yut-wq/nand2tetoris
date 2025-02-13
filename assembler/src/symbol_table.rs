@@ -11,6 +11,10 @@ impl SymbolTable {
         let SymbolTable(table) = self;
         table.insert(symbol, address);
     }
+
+    pub fn contains(&self, symbol: &str) -> bool {
+        todo!()
+    }
 }
 
 #[cfg(test)]
@@ -26,5 +30,18 @@ mod test {
 
         assert!(table.contains_key("test"));
         assert_eq!(*table.get("test").unwrap(), 8);
+    }
+
+    #[test]
+    fn symbol_table_contains_success() {
+        let table = HashMap::from([
+            ("Mercury".to_string(), 4),
+            ("Venus".to_string(), 7),
+            ("Earth".to_string(), 1),
+            ("Mars".to_string(), 15),
+        ]);
+        let table = SymbolTable(table);
+
+        assert!(table.contains("Venus"));
     }
 }
