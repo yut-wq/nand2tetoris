@@ -19,6 +19,7 @@ pub fn run(file_name: &str) {
     let mut file = File::create(format!("{}.hack", file_name_base)).unwrap();
 
     // parse処理
+    let mut bin_codes = String::new();
     while parser.has_more_line() {
         parser.advance();
 
@@ -28,7 +29,7 @@ pub fn run(file_name: &str) {
                 let symbol = parser.symbol();
                 let symbol: u16 = symbol.parse().unwrap();
                 let bin_code = format!("{:016b}\n", symbol);
-                file.write_all(bin_code.as_bytes()).unwrap();
+                bin_codes.push_str(&bin_code);
             }
             parser::InstructionType::CInstruction => {
                 let comp = parser.comp();
@@ -41,11 +42,13 @@ pub fn run(file_name: &str) {
                 let jump = Code::jump(&jump);
 
                 let bin_code = format!("111{}{}{}\n", comp, dest, jump);
-                file.write_all(bin_code.as_bytes()).unwrap();
+                bin_codes.push_str(&bin_code);
             }
             parser::InstructionType::LInstruction => todo!(),
         }
     }
+
+    file.write_all(bin_codes.as_bytes()).unwrap();
 
     println!("finish");
 }
