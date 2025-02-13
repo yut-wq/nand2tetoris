@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+#[derive(Debug)]
 pub struct SymbolTable(HashMap<String, u16>);
 
 impl SymbolTable {
