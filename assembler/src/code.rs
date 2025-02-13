@@ -2,7 +2,7 @@
 pub struct Code;
 
 impl Code {
-    fn dest(&self, dest: &str) -> String {
+    fn dest(dest: &str) -> String {
         if dest.is_empty() {
             return "000".to_string();
         }
@@ -30,7 +30,7 @@ impl Code {
         bin_code
     }
 
-    fn jump(&self, jump: &str) -> String {
+    fn jump(jump: &str) -> String {
         if jump.is_empty() {
             return "000".to_string();
         }
@@ -47,17 +47,17 @@ impl Code {
         }
     }
 
-    fn comp(&self, comp: &str) -> String {
+    fn comp(comp: &str) -> String {
         match comp {
-            "0" =>   "0101010".to_string(),
-            "1" =>   "0111111".to_string(),
-            "-1" =>  "0111010".to_string(),
-            "D" =>   "0001100".to_string(),
-            "A" =>   "0110000".to_string(),
-            "!D" =>  "0001101".to_string(),
-            "!A" =>  "0110001".to_string(),
-            "-D" =>  "0001111".to_string(),
-            "-A" =>  "0110011".to_string(),
+            "0" => "0101010".to_string(),
+            "1" => "0111111".to_string(),
+            "-1" => "0111010".to_string(),
+            "D" => "0001100".to_string(),
+            "A" => "0110000".to_string(),
+            "!D" => "0001101".to_string(),
+            "!A" => "0110001".to_string(),
+            "-D" => "0001111".to_string(),
+            "-A" => "0110011".to_string(),
             "D+1" => "0011111".to_string(),
             "A+1" => "0110111".to_string(),
             "D-1" => "0001110".to_string(),
@@ -68,9 +68,9 @@ impl Code {
             "D&A" => "0000000".to_string(),
             "D|A" => "0010101".to_string(),
 
-            "M" =>   "1110000".to_string(),
-            "!M" =>  "1110001".to_string(),
-            "-M" =>  "1110011".to_string(),
+            "M" => "1110000".to_string(),
+            "!M" => "1110001".to_string(),
+            "-M" => "1110011".to_string(),
             "M+1" => "1110111".to_string(),
             "M-1" => "1110010".to_string(),
             "D+M" => "1000010".to_string(),
@@ -89,63 +89,49 @@ mod test {
 
     #[test]
     fn dest_null_return_zeros() {
-        let code = Code;
-
-        let result = code.dest("");
+        let result = Code::dest("");
 
         assert_eq!(result, "000");
     }
 
     #[test]
     fn dest_m_return_zero_zero_one() {
-        let code = Code;
-
-        let result = code.dest("M");
+        let result = Code::dest("M");
 
         assert_eq!(result, "001");
     }
 
     #[test]
     fn dest_ad_return_one_one_zero() {
-        let code = Code;
-
-        let result = code.dest("AD");
+        let result = Code::dest("AD");
 
         assert_eq!(result, "110");
     }
 
     #[test]
     fn jump_null_return_zeros() {
-        let code = Code;
-
-        let result = code.jump("");
+        let result = Code::jump("");
 
         assert_eq!(result, "000");
     }
 
     #[test]
     fn jump_jgt_return_zero_zero_one() {
-        let code = Code;
-
-        let result = code.jump("JGT");
+        let result = Code::jump("JGT");
 
         assert_eq!(result, "001");
     }
 
     #[test]
     fn jump_jle_return_one_one_zero() {
-        let code = Code;
-
-        let result = code.jump("JLE");
+        let result = Code::jump("JLE");
 
         assert_eq!(result, "110");
     }
 
     #[test]
     fn comp_a_plus_one_return_0110111() {
-        let code = Code;
-
-        let result = code.comp("A+1");
+        let result = Code::comp("A+1");
 
         assert_eq!(result, "0110111");
     }
