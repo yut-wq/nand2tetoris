@@ -10,7 +10,7 @@ enum InstructionType {
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Default)]
 pub struct Parser {
-    pub lines: Vec<String>,
+    lines: Vec<String>,
     now_line: usize,
     instruction: String,
 }
@@ -37,13 +37,13 @@ impl Parser {
         }
     }
 
-    fn has_more_line(&self) -> bool {
+    pub fn has_more_line(&self) -> bool {
         let line_counts = self.lines.len();
         self.now_line < line_counts
     }
 
     /// 次の命令を読み込む
-    fn advance(&mut self) {
+    pub fn advance(&mut self) {
         let comment = Regex::new(r"\s*//.*").unwrap();
         while self.has_more_line() {
             let now_line = &self.lines[self.now_line];
@@ -62,7 +62,7 @@ impl Parser {
     }
 
     /// 現在の命令タイプを返す
-    fn instruction_type(&self) -> InstructionType {
+    pub fn instruction_type(&self) -> InstructionType {
         let a_instruction = Regex::new(r"\s*@\d+\s*").unwrap();
         let l_instruction = Regex::new(r"\s*\(\w+\)\s*").unwrap();
 
@@ -75,7 +75,7 @@ impl Parser {
         }
     }
 
-    fn symbol(&self) -> String {
+    pub fn symbol(&self) -> String {
         // 現在の命令で分岐
         let instruction_type = self.instruction_type();
         match instruction_type {
@@ -97,7 +97,7 @@ impl Parser {
         }
     }
 
-    fn dest(&self) -> String {
+    pub fn dest(&self) -> String {
         let instruction_type = self.instruction_type();
         match instruction_type {
             InstructionType::AInstruction => todo!(),
@@ -112,7 +112,7 @@ impl Parser {
         }
     }
 
-    fn comp(&self) -> String {
+    pub fn comp(&self) -> String {
         let instruction_type = self.instruction_type();
         match instruction_type {
             InstructionType::AInstruction => todo!(),
@@ -127,7 +127,7 @@ impl Parser {
         }
     }
 
-    fn jump(&self) -> String {
+    pub fn jump(&self) -> String {
         let instruction_type = self.instruction_type();
         match instruction_type {
             InstructionType::AInstruction => todo!(),
