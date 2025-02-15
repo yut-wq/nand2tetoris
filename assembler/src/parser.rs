@@ -293,6 +293,19 @@ mod test {
     }
 
     #[test]
+    fn symbol_include_dot_return_l_instruction() {
+        let parser = Parser {
+            lines: vec!["    (sys.init)".to_string()],
+            now_line: 1,
+            instruction: "    (sys.init)".to_string(),
+        };
+
+        let symbol = parser.symbol();
+
+        assert_eq!(symbol, "sys.init");
+    }
+
+    #[test]
     fn dest_return_dest() {
         let parser = Parser {
             lines: vec!["    D=D+1;JLE".to_string()],
