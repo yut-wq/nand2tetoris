@@ -1,7 +1,7 @@
 use code::Code;
 use parser::Parser;
 use regex::Regex;
-use std::{collections::HashMap, fs::File, io::Write, iter::zip};
+use std::{collections::HashMap, fs::File, io::Write};
 use symbol_table::SymbolTable;
 
 mod code;
@@ -29,7 +29,6 @@ pub fn run(file_name: &str) {
     let mut line_count = 0;
     while parser.has_more_line() {
         parser.advance();
-        // println!("{:#?}", parser);
 
         let instruction_type = parser.instruction_type();
         match instruction_type {
@@ -56,10 +55,8 @@ pub fn run(file_name: &str) {
     let mut min_address = 16;
     while parser.has_more_line() {
         parser.advance();
-        // println!("{:#?}", parser);
 
         let instruction_type = parser.instruction_type();
-        // println!("{:#?}", instruction_type);
         match instruction_type {
             parser::InstructionType::AInstruction => {
                 let symbol = parser.symbol();
@@ -69,10 +66,6 @@ pub fn run(file_name: &str) {
                         bin_codes.push_str(&bin_code);
                     }
                     Err(_) => {
-                        println!("{}", symbol);
-                        // if (symbol == "sys") {
-                        //     println!("{:#?}", parser);
-                        // }
                         if symbol_table.contains(&symbol) {
                             let symbol = symbol_table.get_address(&symbol);
                             let bin_code = format!("{:016b}\n", symbol);
