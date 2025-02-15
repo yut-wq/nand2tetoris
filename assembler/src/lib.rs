@@ -33,8 +33,12 @@ pub fn run(file_name: &str) {
 
         let instruction_type = parser.instruction_type();
         match instruction_type {
-            parser::InstructionType::AInstruction => {}
-            parser::InstructionType::CInstruction => {}
+            parser::InstructionType::AInstruction => {
+                line_count += 1;
+            }
+            parser::InstructionType::CInstruction => {
+                line_count += 1;
+            }
             parser::InstructionType::LInstruction => {
                 let symbol = parser.symbol();
                 let address = line_count;
@@ -43,7 +47,6 @@ pub fn run(file_name: &str) {
                 available_address.remove(&address);
             }
         }
-        line_count += 1;
     }
     println!("{:#?}", symbol_table);
 
