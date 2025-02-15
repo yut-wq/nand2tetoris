@@ -215,6 +215,20 @@ mod test {
     }
 
     #[test]
+    fn advance_include_dot() {
+        let mut parser = Parser {
+            lines: vec!["(sys.init)".to_string(), "    @99".to_string()],
+            now_line: 0,
+            instruction: String::new(),
+        };
+
+        parser.advance();
+
+        assert_eq!(parser.now_line, 1);
+        assert_eq!(parser.instruction, "(sys.init)".to_string());
+    }
+
+    #[test]
     fn instruction_type_return_a_instruction() {
         let parser = Parser {
             lines: vec!["  @R0".to_string()],
@@ -280,6 +294,19 @@ mod test {
     }
 
     #[test]
+    fn symbol_include_dot_return_a_instruction() {
+        let parser = Parser {
+            lines: vec!["@sys.halt".to_string()],
+            now_line: 1,
+            instruction: "@sys.halt".to_string(),
+        };
+
+        let symbol = parser.symbol();
+
+        assert_eq!(symbol, "sys.halt");
+    }
+
+    #[test]
     fn symbol_return_l_instruction() {
         let parser = Parser {
             lines: vec!["    (WHITE)".to_string()],
@@ -295,14 +322,14 @@ mod test {
     #[test]
     fn symbol_include_dot_return_l_instruction() {
         let parser = Parser {
-            lines: vec!["    (sys.init)".to_string()],
+            lines: vec![r"(sys.init)".to_string()],
             now_line: 1,
-            instruction: "    (sys.init)".to_string(),
+            instruction: r"(sys.init)".to_string(),
         };
 
         let symbol = parser.symbol();
 
-        assert_eq!(symbol, "sys.init");
+        assert_eq!(symbol, r"sys.init");
     }
 
     #[test]
