@@ -23,4 +23,34 @@ impl Parser {
 
         Self { lines, now_line: 0 }
     }
+
+    pub fn has_more_lines(&self) -> bool {
+        let line_counts = self.lines.len();
+        self.now_line < line_counts
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn has_more_line_return_true() {
+        let parser = Parser {
+            lines: vec!["test".to_string()],
+            now_line: 0,
+        };
+
+        assert!(parser.has_more_lines());
+    }
+
+    #[test]
+    fn has_more_line_return_false() {
+        let parser = Parser {
+            lines: vec!["test".to_string()],
+            now_line: 1,
+        };
+
+        assert!(!parser.has_more_lines());
+    }
 }
