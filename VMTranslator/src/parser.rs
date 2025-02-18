@@ -62,4 +62,18 @@ mod test {
 
         assert!(!parser.has_more_lines());
     }
+
+    #[test]
+    fn advance_return_next_command() {
+        let mut parser = Parser {
+            lines: vec!["push local 2".to_string()],
+            now_line: 0,
+            command: String::new(),
+        };
+
+        parser.advance();
+
+        assert_eq!(parser.now_line, 1);
+        assert_eq!(parser.command, "push local 2".to_string());
+    }
 }
