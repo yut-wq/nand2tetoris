@@ -1,4 +1,10 @@
+use lazy_static::lazy_static;
+use regex::Regex;
 use std::{fs::File, io::Read};
+
+lazy_static! {
+    static ref COMMENT: Regex = Regex::new(r"\s*//.*").unwrap();
+}
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Default)]
 pub struct Parser {
@@ -34,7 +40,22 @@ impl Parser {
         self.now_line < line_counts
     }
 
-    pub fn advance(&self) {}
+    pub fn advance(&mut self) {
+        while self.has_more_lines() {
+            let now_line = &self.lines[self.now_line];
+            let now_line = now_line.trim_start();
+
+            let is_comment = COMMENT.captures(now_line).is_some();
+            if now_line.is_empty() || is_comment {
+                self.now_line += 1;
+                continue;
+            }
+
+            self.command = self.lines[self.now_line].clone();
+            self.now_line += 1;
+            break;
+        }
+    }
 }
 
 #[cfg(test)]
