@@ -71,7 +71,7 @@ impl Parser {
     }
 
     pub fn command_type(&self) -> CommandType {
-        let command = Regex::new(r"\s*(\w)\s.*").unwrap();
+        let command = Regex::new(r"\s*(\w+)\s.*").unwrap();
         let Some(command) = command.captures(&self.command) else {
             panic!("invalid command. line: {}", self.now_line);
         };
