@@ -167,6 +167,6 @@ mod test {
 
         let command_type = parser.command_type();
 
-        assert_eq!(command_type, CommandType::Arithmetic);
+        assert_eq!(command_type, CommandType::Push);
     }
 }
