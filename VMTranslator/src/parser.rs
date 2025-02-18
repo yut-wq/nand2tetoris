@@ -6,6 +6,18 @@ lazy_static! {
     static ref COMMENT: Regex = Regex::new(r"\s*//.*").unwrap();
 }
 
+enum CommandType {
+    Arithmetic,
+    Push,
+    Pop,
+    Label,
+    Goto,
+    If,
+    Function,
+    Return,
+    Call,
+}
+
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Default)]
 pub struct Parser {
     lines: Vec<String>,
