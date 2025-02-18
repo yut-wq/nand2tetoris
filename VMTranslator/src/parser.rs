@@ -97,4 +97,18 @@ mod test {
         assert_eq!(parser.now_line, 1);
         assert_eq!(parser.command, "push local 2".to_string());
     }
+
+    #[test]
+    fn advance_ignore_space() {
+        let mut parser = Parser {
+            lines: vec![" ".to_string(), "push local 2".to_string()],
+            now_line: 0,
+            command: String::new(),
+        };
+
+        parser.advance();
+
+        assert_eq!(parser.now_line, 2);
+        assert_eq!(parser.command, "push local 2".to_string());
+    }
 }
