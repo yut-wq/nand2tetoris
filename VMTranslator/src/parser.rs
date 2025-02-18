@@ -71,7 +71,7 @@ impl Parser {
     }
 
     pub fn command_type(&self) -> CommandType {
-        let command = Regex::new(r"\s*(\w+)\s.*").unwrap();
+        let command = Regex::new(r"\s*(\w+)").unwrap();
         let Some(command) = command.captures(&self.command) else {
             panic!("invalid command. line: {}", self.now_line);
         };
@@ -158,7 +158,7 @@ mod test {
     }
 
     #[test]
-    fn command_type_return_arithmetic() {
+    fn command_type_return_push() {
         let parser = Parser {
             lines: vec!["push local 2".to_string()],
             now_line: 1,
@@ -168,5 +168,18 @@ mod test {
         let command_type = parser.command_type();
 
         assert_eq!(command_type, CommandType::Push);
+    }
+
+    #[test]
+    fn command_type_return_arithmetic() {
+        let parser = Parser {
+            lines: vec!["neg".to_string()],
+            now_line: 1,
+            command: "neg".to_string(),
+        };
+
+        let command_type = parser.command_type();
+
+        assert_eq!(command_type, CommandType::Arithmetic);
     }
 }
