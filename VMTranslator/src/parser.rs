@@ -4,7 +4,6 @@ use std::{fs::File, io::Read};
 pub struct Parser {
     lines: Vec<String>,
     now_line: usize,
-    instruction: String,
 }
 
 impl Parser {
@@ -22,10 +21,6 @@ impl Parser {
             lines.push(line.to_string());
         }
 
-        Self {
-            lines,
-            now_line: 0,
-            instruction: String::new(),
-        }
+        Self { lines, now_line: 0 }
     }
 }
