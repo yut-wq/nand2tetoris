@@ -4,6 +4,7 @@ use std::{fs::File, io::Read};
 pub struct Parser {
     lines: Vec<String>,
     now_line: usize,
+    command: String,
 }
 
 impl Parser {
@@ -21,13 +22,19 @@ impl Parser {
             lines.push(line.to_string());
         }
 
-        Self { lines, now_line: 0 }
+        Self {
+            lines,
+            now_line: 0,
+            command: String::new(),
+        }
     }
 
     pub fn has_more_lines(&self) -> bool {
         let line_counts = self.lines.len();
         self.now_line < line_counts
     }
+
+    pub fn advance(&self) {}
 }
 
 #[cfg(test)]
@@ -39,6 +46,7 @@ mod test {
         let parser = Parser {
             lines: vec!["test".to_string()],
             now_line: 0,
+            command: String::new(),
         };
 
         assert!(parser.has_more_lines());
@@ -49,6 +57,7 @@ mod test {
         let parser = Parser {
             lines: vec!["test".to_string()],
             now_line: 1,
+            command: String::new(),
         };
 
         assert!(!parser.has_more_lines());
