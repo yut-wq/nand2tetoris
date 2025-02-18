@@ -6,6 +6,7 @@ lazy_static! {
     static ref COMMENT: Regex = Regex::new(r"\s*//.*").unwrap();
 }
 
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash)]
 enum CommandType {
     Arithmetic,
     Push,
@@ -154,5 +155,18 @@ mod test {
 
         assert_eq!(parser.now_line, 2);
         assert_eq!(parser.command, "push local 2".to_string());
+    }
+
+    #[test]
+    fn command_type_return_arithmetic() {
+        let parser = Parser {
+            lines: vec!["push local 2".to_string()],
+            now_line: 1,
+            command: "push local 2".to_string(),
+        };
+
+        let command_type = parser.command_type();
+
+        assert_eq!(command_type, CommandType::Arithmetic);
     }
 }
