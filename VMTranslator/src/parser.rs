@@ -68,6 +68,21 @@ impl Parser {
             break;
         }
     }
+
+    pub fn command_type(&self) -> CommandType {
+        let command = Regex::new(r"\s*(\w)\s.*").unwrap();
+        let Some(command) = command.captures(&self.command) else {
+            panic!("invalid command. line: {}", self.now_line);
+        };
+        match &command[1] {
+            "add" | "sub" | "neg" | "eq" | "gt" | "lt" | "and" | "or" | "not" => {
+                CommandType::Arithmetic
+            }
+            "push" => CommandType::Push,
+            "pop" => CommandType::Pop,
+            _ => todo!(),
+        }
+    }
 }
 
 #[cfg(test)]
