@@ -111,15 +111,12 @@ impl Parser {
     pub fn arg2(&self) -> Result<u32> {
         let command_type = self.command_type();
         match command_type {
-            CommandType::Push => {
+            CommandType::Push | CommandType::Pop | CommandType::Function | CommandType::Call => {
                 let Some(first_arg) = SECOND_ARG.captures(&self.command) else {
                     return Err(anyhow!("invalid command. line: {}", self.now_line));
                 };
                 Ok(first_arg[1].parse()?)
             }
-            CommandType::Pop => todo!(),
-            CommandType::Function => todo!(),
-            CommandType::Call => todo!(),
             CommandType::Arithmetic
             | CommandType::Label
             | CommandType::Goto
