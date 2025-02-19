@@ -92,19 +92,19 @@ impl Parser {
         let command_type = self.command_type();
         match command_type {
             CommandType::Arithmetic => Ok(self.command.clone()),
-            CommandType::Push => {
+            CommandType::Return => Err(anyhow!("command type is return.")),
+            CommandType::Push
+            | CommandType::Pop
+            | CommandType::Label
+            | CommandType::Goto
+            | CommandType::If
+            | CommandType::Function
+            | CommandType::Call => {
                 let Some(first_arg) = FIRST_ARG.captures(&self.command) else {
                     return Err(anyhow!("invalid command. line: {}", self.now_line));
                 };
                 Ok(first_arg[1].to_string())
             }
-            CommandType::Pop => todo!(),
-            CommandType::Label => todo!(),
-            CommandType::Goto => todo!(),
-            CommandType::If => todo!(),
-            CommandType::Function => todo!(),
-            CommandType::Return => Err(anyhow!("command type is return.")),
-            CommandType::Call => todo!(),
         }
     }
 }
