@@ -239,4 +239,18 @@ mod test {
         assert_eq!(arg1, "add");
         Ok(())
     }
+
+    #[test]
+    fn arg1_not_return_not() -> Result<()> {
+        let parser = Parser {
+            lines: vec!["not".to_string()],
+            now_line: 1,
+            command: "not".to_string(),
+        };
+
+        let arg1 = parser.arg1()?;
+
+        assert_eq!(arg1, "not");
+        Ok(())
+    }
 }
