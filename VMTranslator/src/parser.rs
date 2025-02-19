@@ -89,10 +89,17 @@ impl Parser {
 
     pub fn arg1(&self) -> Result<String> {
         let command_type = self.command_type();
-        if let CommandType::Return = command_type {
-            return Err(anyhow!("command type is return."));
+        match command_type {
+            CommandType::Arithmetic => Ok(self.command.clone()),
+            CommandType::Push => todo!(),
+            CommandType::Pop => todo!(),
+            CommandType::Label => todo!(),
+            CommandType::Goto => todo!(),
+            CommandType::If => todo!(),
+            CommandType::Function => todo!(),
+            CommandType::Return => Err(anyhow!("command type is return.")),
+            CommandType::Call => todo!(),
         }
-        todo!()
     }
 }
 
