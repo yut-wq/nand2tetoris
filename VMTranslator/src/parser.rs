@@ -107,6 +107,9 @@ impl Parser {
             }
         }
     }
+    pub fn arg2(&self) -> Result<u32> {
+        todo!()
+    }
 }
 
 #[cfg(test)]
@@ -285,6 +288,20 @@ mod test {
         let arg1 = parser.arg1()?;
 
         assert_eq!(arg1, "local");
+        Ok(())
+    }
+
+    #[test]
+    fn arg2_add_return_error() -> Result<()> {
+        let parser = Parser {
+            lines: vec!["add".to_string()],
+            now_line: 1,
+            command: "add".to_string(),
+        };
+
+        let result = parser.arg2();
+
+        assert!(result.is_err());
         Ok(())
     }
 }
