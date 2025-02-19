@@ -1,3 +1,4 @@
+use anyhow::Result;
 use lazy_static::lazy_static;
 use regex::Regex;
 use std::{fs::File, io::Read};
@@ -81,6 +82,7 @@ impl Parser {
             }
             "push" => CommandType::Push,
             "pop" => CommandType::Pop,
+            "return" => CommandType::Return,
             _ => todo!(),
         }
     }
@@ -181,5 +183,18 @@ mod test {
         let command_type = parser.command_type();
 
         assert_eq!(command_type, CommandType::Arithmetic);
+    }
+
+    #[test]
+    fn command_type_return_return() {
+        let parser = Parser {
+            lines: vec!["return".to_string()],
+            now_line: 1,
+            command: "return".to_string(),
+        };
+
+        let command_type = parser.command_type();
+
+        assert_eq!(command_type, CommandType::Return);
     }
 }
