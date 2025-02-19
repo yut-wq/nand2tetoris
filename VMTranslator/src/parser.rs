@@ -91,7 +91,13 @@ impl Parser {
         let command_type = self.command_type();
         match command_type {
             CommandType::Arithmetic => Ok(self.command.clone()),
-            CommandType::Push => todo!(),
+            CommandType::Push => {
+                let first_arg = Regex::new(r"\s*\w+\s(\w+)").unwrap();
+                let Some(first_arg) = first_arg.captures(&self.command) else {
+                    return Err(anyhow!("invalid command. line: {}", self.now_line));
+                };
+                Ok(first_arg[1].to_string())
+            }
             CommandType::Pop => todo!(),
             CommandType::Label => todo!(),
             CommandType::Goto => todo!(),
