@@ -86,6 +86,10 @@ impl Parser {
             _ => todo!(),
         }
     }
+
+    pub fn arg1(&self) -> Result<String> {
+        todo!()
+    }
 }
 
 #[cfg(test)]
@@ -196,5 +200,18 @@ mod test {
         let command_type = parser.command_type();
 
         assert_eq!(command_type, CommandType::Return);
+    }
+
+    #[test]
+    fn arg1_return_return_error() {
+        let parser = Parser {
+            lines: vec!["return".to_string()],
+            now_line: 1,
+            command: "return".to_string(),
+        };
+
+        let result = parser.arg1();
+
+        assert!(result.is_err());
     }
 }
