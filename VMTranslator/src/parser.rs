@@ -5,6 +5,7 @@ use std::{fs::File, io::Read};
 
 lazy_static! {
     static ref COMMENT: Regex = Regex::new(r"\s*//.*").unwrap();
+    static ref COMMAND: Regex = Regex::new(r"\s*(\w+)").unwrap();
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash)]
@@ -72,8 +73,7 @@ impl Parser {
     }
 
     pub fn command_type(&self) -> CommandType {
-        let command = Regex::new(r"\s*(\w+)").unwrap();
-        let Some(command) = command.captures(&self.command) else {
+        let Some(command) = COMMAND.captures(&self.command) else {
             panic!("invalid command. line: {}", self.now_line);
         };
         match &command[1] {
