@@ -273,4 +273,18 @@ mod test {
         assert_eq!(arg1, "local");
         Ok(())
     }
+
+    #[test]
+    fn arg1_pop_return_local() -> Result<()> {
+        let parser = Parser {
+            lines: vec!["pop local 2".to_string()],
+            now_line: 1,
+            command: "pop local 2".to_string(),
+        };
+
+        let arg1 = parser.arg1()?;
+
+        assert_eq!(arg1, "local");
+        Ok(())
+    }
 }
