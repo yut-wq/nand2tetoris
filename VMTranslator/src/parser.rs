@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use lazy_static::lazy_static;
 use regex::Regex;
 use std::{fs::File, io::Read};
@@ -88,6 +88,10 @@ impl Parser {
     }
 
     pub fn arg1(&self) -> Result<String> {
+        let command_type = self.command_type();
+        if let CommandType::Return = command_type {
+            return Err(anyhow!("command type is return."));
+        }
         todo!()
     }
 }
