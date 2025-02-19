@@ -7,6 +7,7 @@ lazy_static! {
     static ref COMMENT: Regex = Regex::new(r"\s*//.*").unwrap();
     static ref COMMAND: Regex = Regex::new(r"\s*(\w+)").unwrap();
     static ref FIRST_ARG: Regex = Regex::new(r"\s*\w+\s(\w+)").unwrap();
+    static ref SECOND_ARG: Regex = Regex::new(r"\s*\w+\s\w+\s(\w+)").unwrap();
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash)]
@@ -110,7 +111,12 @@ impl Parser {
     pub fn arg2(&self) -> Result<u32> {
         let command_type = self.command_type();
         match command_type {
-            CommandType::Push => todo!(),
+            CommandType::Push => {
+                let Some(first_arg) = SECOND_ARG.captures(&self.command) else {
+                    return Err(anyhow!("invalid command. line: {}", self.now_line));
+                };
+                Ok(first_arg[1].parse()?)
+            }
             CommandType::Pop => todo!(),
             CommandType::Function => todo!(),
             CommandType::Call => todo!(),
