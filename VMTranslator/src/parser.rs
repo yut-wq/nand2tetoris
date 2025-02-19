@@ -108,7 +108,18 @@ impl Parser {
         }
     }
     pub fn arg2(&self) -> Result<u32> {
-        todo!()
+        let command_type = self.command_type();
+        match command_type {
+            CommandType::Push => todo!(),
+            CommandType::Pop => todo!(),
+            CommandType::Function => todo!(),
+            CommandType::Call => todo!(),
+            CommandType::Arithmetic
+            | CommandType::Label
+            | CommandType::Goto
+            | CommandType::If
+            | CommandType::Return => Err(anyhow!("Don't have arg2.")),
+        }
     }
 }
 
