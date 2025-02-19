@@ -335,4 +335,18 @@ mod test {
         assert_eq!(arg2, 2);
         Ok(())
     }
+
+    #[test]
+    fn arg2_pop_return_999() -> Result<()> {
+        let parser = Parser {
+            lines: vec!["pop local 999".to_string()],
+            now_line: 1,
+            command: "pop local 999".to_string(),
+        };
+
+        let arg2 = parser.arg2()?;
+
+        assert_eq!(arg2, 999);
+        Ok(())
+    }
 }
