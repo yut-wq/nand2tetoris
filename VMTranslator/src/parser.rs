@@ -218,4 +218,18 @@ mod test {
 
         assert!(result.is_err());
     }
+
+    #[test]
+    fn arg1_add_return_add() -> Result<()> {
+        let parser = Parser {
+            lines: vec!["add".to_string()],
+            now_line: 1,
+            command: "add".to_string(),
+        };
+
+        let arg1 = parser.arg1()?;
+
+        assert_eq!(arg1, "add");
+        Ok(())
+    }
 }
