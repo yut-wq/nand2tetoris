@@ -11,7 +11,7 @@ lazy_static! {
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash)]
-enum CommandType {
+pub enum CommandType {
     Arithmetic,
     Push,
     Pop,
