@@ -1,4 +1,4 @@
-use std::fs::File;
+use std::{fs::File, io::Write};
 
 use crate::parser::CommandType;
 
@@ -14,10 +14,56 @@ impl CodeWriter {
     }
 
     pub fn write_push_pop(&mut self, command: CommandType, segment: &str, index: i32) {
-        // pop
-        // pop
-        // 加算
-        // push
+        match command {
+            CommandType::Arithmetic
+            | CommandType::Label
+            | CommandType::Goto
+            | CommandType::If
+            | CommandType::Function
+            | CommandType::Return
+            | CommandType::Call => (),
+            CommandType::Push => {
+                let segment = match segment {
+                    "argument" => "ARG",
+                    "local" => "LCL",
+                    "static" => todo!(),
+                    "constant" => &format!("{}", index),
+                    "this" => "THIS",
+                    "that" => "THAT",
+                    "pointer" => {
+                        if index == 0 {
+                            "THIS"
+                        } else if index == 1 {
+                            "THAT"
+                        } else {
+                            return;
+                        }
+                    }
+                    "temp" => &format!("{}", 5 + index),
+                    _ => return,
+                };
+                let mut bin_codes = String::new();
+
+                // Dレジスタにxの値を置く
+                bin_codes.push_str(&format!("@{}", segment));
+                bin_codes.push_str("D=M");
+                bin_codes.push_str(&format!("@{}", index));
+                bin_codes.push_str("A=D+A");
+                bin_codes.push_str("D=M");
+
+                // ram[sp] = x
+                bin_codes.push_str("@SP");
+                bin_codes.push_str("A=M");
+                bin_codes.push_str("M=D");
+
+                // sp++
+                bin_codes.push_str("@SP");
+                bin_codes.push_str("M=M+1");
+
+                self.file.write_all(bin_codes.as_bytes()).unwrap();
+            }
+            CommandType::Pop => todo!(),
+        }
     }
 
     /// 算術コマンドに対する書き込み処理
