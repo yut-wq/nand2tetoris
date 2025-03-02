@@ -74,3 +74,21 @@ impl CodeWriter {
         // push
     }
 }
+
+/// push
+/// push++
+/// 上記の処理を実行するアセンブリを生成する。
+fn push_data_register() -> String {
+    let mut push_codes = String::new();
+
+    // ram[sp] = x
+    push_codes.push_str("@SP");
+    push_codes.push_str("A=M");
+    push_codes.push_str("M=D");
+
+    // sp++
+    push_codes.push_str("@SP");
+    push_codes.push_str("M=M+1");
+
+    push_codes
+}
