@@ -14,6 +14,7 @@ impl CodeWriter {
     }
 
     pub fn write_push_pop(&mut self, command: CommandType, segment: &str, index: i32) {
+        let mut bin_codes = String::new();
         match command {
             CommandType::Arithmetic
             | CommandType::Label
@@ -24,32 +25,23 @@ impl CodeWriter {
             | CommandType::Call => (),
             CommandType::Push => {
                 let segment = match segment {
-                    "argument" => "ARG",
-                    "local" => "LCL",
-                    "static" => todo!(),
-                    "constant" => &format!("{}", index),
-                    "this" => "THIS",
-                    "that" => "THAT",
-                    "pointer" => {
-                        if index == 0 {
-                            "THIS"
-                        } else if index == 1 {
-                            "THAT"
-                        } else {
-                            return;
-                        }
+                    "argument" => todo!(),
+                    "local" => {
+                        // Dレジスタにxの値を置く
+                        bin_codes.push_str("@LCL");
+                        bin_codes.push_str("D=M");
+                        bin_codes.push_str(&format!("@{}", index));
+                        bin_codes.push_str("A=D+A");
+                        bin_codes.push_str("D=M");
                     }
-                    "temp" => &format!("{}", 5 + index),
+                    "static" => todo!(),
+                    "constant" => todo!(),
+                    "this" => todo!(),
+                    "that" => todo!(),
+                    "pointer" => todo!(),
+                    "temp" => todo!(),
                     _ => return,
                 };
-                let mut bin_codes = String::new();
-
-                // Dレジスタにxの値を置く
-                bin_codes.push_str(&format!("@{}", segment));
-                bin_codes.push_str("D=M");
-                bin_codes.push_str(&format!("@{}", index));
-                bin_codes.push_str("A=D+A");
-                bin_codes.push_str("D=M");
 
                 let push_codes = push_data_register();
                 bin_codes.push_str(&push_codes);
