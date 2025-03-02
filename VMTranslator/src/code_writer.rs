@@ -35,7 +35,11 @@ impl CodeWriter {
                         bin_codes.push_str("D=M");
                     }
                     "static" => todo!(),
-                    "constant" => todo!(),
+                    "constant" => {
+                        // Dレジスタにxの値を置く
+                        bin_codes.push_str(&format!("@{}", index));
+                        bin_codes.push_str("D=A");
+                    }
                     "this" => todo!(),
                     "that" => todo!(),
                     "pointer" => todo!(),
