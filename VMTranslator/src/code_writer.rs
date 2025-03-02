@@ -13,7 +13,7 @@ impl CodeWriter {
         Self { file }
     }
 
-    pub fn write_push_pop(&mut self, command: CommandType, segment: &str, index: i32) {
+    pub fn write_push_pop(&mut self, command: CommandType, segment: &str, index: u32) {
         let mut bin_codes = String::new();
         match command {
             CommandType::Arithmetic

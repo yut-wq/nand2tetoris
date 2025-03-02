@@ -16,7 +16,7 @@ pub fn run(file_name: &str) {
     let file_name_base = file_name_base[1].to_string();
 
     // writerの作成
-    let writer = CodeWriter::new(&file_name_base);
+    let mut writer = CodeWriter::new(&file_name_base);
 
     // 反復処理
     while parser.has_more_lines() {
@@ -25,7 +25,11 @@ pub fn run(file_name: &str) {
         let command = parser.command_type();
         match command {
             parser::CommandType::Arithmetic => todo!(),
-            parser::CommandType::Push => todo!(),
+            parser::CommandType::Push => {
+                let segment = parser.arg1().expect("get arg1 failed");
+                let index = parser.arg2().expect("get arg2 failed");
+                writer.write_push_pop(command, &segment, index);
+            }
             parser::CommandType::Pop => todo!(),
             parser::CommandType::Label => todo!(),
             parser::CommandType::Goto => todo!(),
