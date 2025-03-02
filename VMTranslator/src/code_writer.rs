@@ -51,14 +51,8 @@ impl CodeWriter {
                 bin_codes.push_str("A=D+A");
                 bin_codes.push_str("D=M");
 
-                // ram[sp] = x
-                bin_codes.push_str("@SP");
-                bin_codes.push_str("A=M");
-                bin_codes.push_str("M=D");
-
-                // sp++
-                bin_codes.push_str("@SP");
-                bin_codes.push_str("M=M+1");
+                let push_codes = push_data_register();
+                bin_codes.push_str(&push_codes);
 
                 self.file.write_all(bin_codes.as_bytes()).unwrap();
             }
