@@ -1,15 +1,15 @@
-use std::{fs::File, io::Write};
+use std::fmt::Write;
 
 use crate::parser::CommandType;
 
 pub struct CodeWriter {
-    file: File,
+    file: String,
 }
 
 impl CodeWriter {
     pub fn new(file_name_base: &str) -> Self {
         // ファイルの作成
-        let file = File::create(format!("{}.asm", file_name_base)).unwrap();
+        let file = String::new();
         Self { file }
     }
 
@@ -24,7 +24,7 @@ impl CodeWriter {
             | CommandType::Return
             | CommandType::Call => (),
             CommandType::Push => {
-                let segment = match segment {
+                let _segment = match segment {
                     "argument" => todo!(),
                     "local" => {
                         // Dレジスタにxの値を置く
@@ -50,7 +50,7 @@ impl CodeWriter {
                 let push_codes = push_data_register();
                 bin_codes.push_str(&push_codes);
 
-                self.file.write_all(bin_codes.as_bytes()).unwrap();
+                self.file.write_str(&bin_codes).unwrap();
             }
             CommandType::Pop => todo!(),
         }
@@ -81,4 +81,21 @@ fn push_data_register() -> String {
     push_codes.push_str("M=M+1");
 
     push_codes
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn push_argument_1() -> Result<(), Box<dyn std::error::Error>> {
+        let mut writer = CodeWriter {
+            file: String::new(),
+        };
+        writer.write_push_pop(CommandType::Push, "argument", 1);
+
+        assert_eq!(writer.file, "push ");
+
+        Ok(())
+    }
 }
