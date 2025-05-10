@@ -65,20 +65,19 @@ impl CodeWriter {
     }
 }
 
-/// push
-/// push++
+/// Dレジスタの値をスタックにpushする。
 /// 上記の処理を実行するアセンブリを生成する。
 fn push_data_register() -> String {
     let mut push_codes = String::new();
 
     // ram[sp] = x
-    push_codes.push_str("@SP");
-    push_codes.push_str("A=M");
-    push_codes.push_str("M=D");
+    push_codes.push_str("@SP\n");
+    push_codes.push_str("A=M\n");
+    push_codes.push_str("M=D\n");
 
     // sp++
-    push_codes.push_str("@SP");
-    push_codes.push_str("M=M+1");
+    push_codes.push_str("@SP\n");
+    push_codes.push_str("M=M+1\n");
 
     push_codes
 }
@@ -86,6 +85,21 @@ fn push_data_register() -> String {
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn push_data_register_test() -> Result<(), Box<dyn std::error::Error>> {
+        let code = push_data_register();
+
+        let expect = r"@SP
+A=M
+M=D
+@SP
+M=M+1
+";
+        assert_eq!(code, expect);
+
+        Ok(())
+    }
 
     #[test]
     fn push_argument_1() -> Result<(), Box<dyn std::error::Error>> {
