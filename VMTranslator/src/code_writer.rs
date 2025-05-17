@@ -3,6 +3,7 @@ use std::fmt::Write;
 use crate::parser::CommandType;
 
 pub struct CodeWriter {
+    file_name: String,
     file: String,
 }
 
@@ -10,7 +11,10 @@ impl CodeWriter {
     pub fn new(file_name_base: &str) -> Self {
         // ファイルの作成
         let file = String::new();
-        Self { file }
+        Self {
+            file_name: file_name_base.to_string(),
+            file,
+        }
     }
 
     pub fn write_push_pop(&mut self, command: CommandType, segment: &str, index: u32) {
@@ -136,6 +140,7 @@ M=M+1
     fn push_argument_1() -> Result<(), Box<dyn std::error::Error>> {
         let mut writer = CodeWriter {
             file: String::new(),
+            file_name: String::new(),
         };
         writer.write_push_pop(CommandType::Push, "argument", 1);
         let expect = r"@ARG
@@ -160,6 +165,7 @@ M=M+1
     fn push_local_2() -> Result<(), Box<dyn std::error::Error>> {
         let mut writer = CodeWriter {
             file: String::new(),
+            file_name: String::new(),
         };
         writer.write_push_pop(CommandType::Push, "local", 2);
         let expect = r"@LCL
@@ -184,6 +190,7 @@ M=M+1
     fn push_this_3() -> Result<(), Box<dyn std::error::Error>> {
         let mut writer = CodeWriter {
             file: String::new(),
+            file_name: String::new(),
         };
         writer.write_push_pop(CommandType::Push, "this", 3);
         let expect = r"@THIS
@@ -208,6 +215,7 @@ M=M+1
     fn push_that_4() -> Result<(), Box<dyn std::error::Error>> {
         let mut writer = CodeWriter {
             file: String::new(),
+            file_name: String::new(),
         };
         writer.write_push_pop(CommandType::Push, "that", 4);
         let expect = r"@THAT
@@ -232,6 +240,7 @@ M=M+1
     fn push_pointer_1() -> Result<(), Box<dyn std::error::Error>> {
         let mut writer = CodeWriter {
             file: String::new(),
+            file_name: String::new(),
         };
         writer.write_push_pop(CommandType::Push, "pointer", 1);
         let expect = r"@THAT
@@ -252,6 +261,7 @@ M=M+1
     fn push_temp_7() -> Result<(), Box<dyn std::error::Error>> {
         let mut writer = CodeWriter {
             file: String::new(),
+            file_name: String::new(),
         };
         writer.write_push_pop(CommandType::Push, "temp", 7);
         let expect = r"@12
@@ -272,6 +282,7 @@ M=M+1
     fn push_constant_17() -> Result<(), Box<dyn std::error::Error>> {
         let mut writer = CodeWriter {
             file: String::new(),
+            file_name: String::new(),
         };
         writer.write_push_pop(CommandType::Push, "constant", 17);
         let expect = r"@17
