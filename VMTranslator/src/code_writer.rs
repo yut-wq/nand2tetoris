@@ -47,7 +47,14 @@ impl CodeWriter {
                         bin_codes.push_str(&format!("@{}", index));
                         bin_codes.push_str("D=A");
                     }
-                    "this" => todo!(),
+                    "this" => {
+                        bin_codes.push_str("@THIS\n");
+                        bin_codes.push_str("D=M\n");
+                        bin_codes.push_str(&format!("@{}\n", index));
+                        bin_codes.push_str("D=D+A\n");
+                        bin_codes.push_str("A=D\n");
+                        bin_codes.push_str("D=M\n");
+                    }
                     "that" => todo!(),
                     "pointer" => todo!(),
                     "temp" => todo!(),
@@ -141,6 +148,30 @@ M=M+1
         let expect = r"@LCL
 D=M
 @2
+D=D+A
+A=D
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+";
+
+        assert_eq!(writer.file, expect);
+
+        Ok(())
+    }
+
+    #[test]
+    fn push_this_3() -> Result<(), Box<dyn std::error::Error>> {
+        let mut writer = CodeWriter {
+            file: String::new(),
+        };
+        writer.write_push_pop(CommandType::Push, "this", 3);
+        let expect = r"@THIS
+D=M
+@3
 D=D+A
 A=D
 D=M
