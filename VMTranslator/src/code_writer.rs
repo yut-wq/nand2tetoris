@@ -24,8 +24,15 @@ impl CodeWriter {
             | CommandType::Return
             | CommandType::Call => (),
             CommandType::Push => {
-                let _segment = match segment {
-                    "argument" => todo!(),
+                match segment {
+                    "argument" => {
+                        bin_codes.push_str("@ARG\n");
+                        bin_codes.push_str("D=A\n");
+                        bin_codes.push_str(&format!("@{}\n", index));
+                        bin_codes.push_str("D=D+A\n");
+                        bin_codes.push_str("A=D\n");
+                        bin_codes.push_str("D=M\n");
+                    }
                     "local" => {
                         // Dレジスタにxの値を置く
                         bin_codes.push_str("@LCL");
