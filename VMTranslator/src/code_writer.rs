@@ -123,6 +123,23 @@ fn push_data_register() -> String {
     push_codes
 }
 
+/// スタックからpopした値をDレジスタに格納する。
+/// 上記の処理を実行するアセンブリを生成する。
+fn pop_data_register() -> String {
+    let mut push_codes = String::new();
+
+    // sp--
+    push_codes.push_str("@SP\n");
+    push_codes.push_str("M=M-1\n");
+
+    // x = ram[sp]
+    push_codes.push_str("@SP\n");
+    push_codes.push_str("A=M\n");
+    push_codes.push_str("D=M\n");
+
+    push_codes
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -322,6 +339,21 @@ M=M+1
 ";
 
         assert_eq!(writer.file, expect);
+
+        Ok(())
+    }
+
+    #[test]
+    fn pop_data_register_test() -> Result<(), Box<dyn std::error::Error>> {
+        let code = pop_data_register();
+
+        let expect = r"@SP
+M=M-1
+@SP
+A=M
+D=M
+";
+        assert_eq!(code, expect);
 
         Ok(())
     }
