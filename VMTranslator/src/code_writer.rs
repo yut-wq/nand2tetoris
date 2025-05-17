@@ -107,8 +107,20 @@ M=M+1
             file: String::new(),
         };
         writer.write_push_pop(CommandType::Push, "argument", 1);
+        let expect = r"@ARG
+D=A
+@1
+D=D+A
+A=D
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+";
 
-        assert_eq!(writer.file, "push ");
+        assert_eq!(writer.file, expect);
 
         Ok(())
     }
