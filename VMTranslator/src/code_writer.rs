@@ -45,9 +45,11 @@ impl CodeWriter {
                         bin_codes.push_str("A=D\n");
                         bin_codes.push_str("D=M\n");
                     }
-                    "static" => todo!(),
+                    "static" => {
+                        bin_codes.push_str(&format!("@{}.{}\n",self.file_name, index));
+                        bin_codes.push_str("D=M\n");
+                    }
                     "constant" => {
-                        // Dレジスタにxの値を置く
                         bin_codes.push_str(&format!("@{}\n", index));
                         bin_codes.push_str("D=A\n");
                     }
@@ -287,6 +289,27 @@ M=M+1
         writer.write_push_pop(CommandType::Push, "constant", 17);
         let expect = r"@17
 D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+";
+
+        assert_eq!(writer.file, expect);
+
+        Ok(())
+    }
+
+    #[test]
+    fn push_static_16() -> Result<(), Box<dyn std::error::Error>> {
+        let mut writer = CodeWriter {
+            file: String::new(),
+            file_name: String::from("Foo"),
+        };
+        writer.write_push_pop(CommandType::Push, "static", 16);
+        let expect = r"@Foo.16
+D=M
 @SP
 A=M
 M=D
