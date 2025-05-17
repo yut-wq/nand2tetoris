@@ -30,7 +30,10 @@ impl CodeWriter {
                 let bin_codes = self.generate_push_codes(segment, index);
                 self.file.write_str(&bin_codes).unwrap();
             }
-            CommandType::Pop => todo!(),
+            CommandType::Pop => {
+                let bin_codes = self.generate_pop_codes(segment, index);
+                self.file.write_str(&bin_codes).unwrap();
+            }
         }
     }
 
@@ -97,6 +100,32 @@ impl CodeWriter {
         bin_codes
     }
 
+    fn generate_pop_codes(&self, segment: &str, index: u32) -> String {
+        let mut bin_codes = String::new();
+        match segment {
+            "argument" => {}
+            "local" => {
+                bin_codes.push_str(&decrement_sp());
+                bin_codes.push_str("@LCL\n");
+                bin_codes.push_str("D=M\n");
+                bin_codes.push_str(&format!("@{}\n", index));
+                bin_codes.push_str("D=D+A\n");
+                bin_codes.push_str("@R13\n");
+                bin_codes.push_str("M=D\n");
+                bin_codes.push_str(&assign_sp_to_r13());
+            }
+            "static" => {}
+            "constant" => {}
+            "this" => {}
+            "that" => {}
+            "pointer" => {}
+            "temp" => {}
+            _ => return String::new(),
+        };
+
+        bin_codes
+    }
+
     /// 算術コマンドに対する書き込み処理
     pub fn write_arithmetic(&mut self, command: &str) {
         // pop
@@ -138,6 +167,29 @@ fn pop_data_register() -> String {
     push_codes.push_str("D=M\n");
 
     push_codes
+}
+
+/// スタックポインタをデクリメントするアセンブリを生成する。
+fn decrement_sp() -> String {
+    let mut codes = String::new();
+    codes.push_str("@SP\n");
+    codes.push_str("M=M-1\n");
+    codes
+}
+
+/// R13に格納されているアドレスにスタックポインタの値を格納するアセンブリを生成する。
+/// R13は、popした値を格納するためのアドレスを格納するために使用される、一時保存用のレジスタ。
+fn assign_sp_to_r13() -> String {
+    let mut codes = String::new();
+    codes.push_str("@SP\n");
+    codes.push_str("A=M\n");
+    codes.push_str("D=M\n");
+
+    codes.push_str("@R13\n");
+    codes.push_str("A=M\n");
+    codes.push_str("M=D\n");
+
+    codes
 }
 
 #[cfg(test)]
@@ -354,6 +406,34 @@ A=M
 D=M
 ";
         assert_eq!(code, expect);
+
+        Ok(())
+    }
+
+    #[test]
+    fn pop_local_1() -> Result<(), Box<dyn std::error::Error>> {
+        let mut writer = CodeWriter {
+            file: String::new(),
+            file_name: String::new(),
+        };
+        writer.write_push_pop(CommandType::Pop, "local", 1);
+        let expect = r"@SP
+M=M-1
+@LCL
+D=M
+@1
+D=D+A
+@R13
+M=D
+@SP
+A=M
+D=M
+@R13
+A=M
+M=D
+";
+
+        assert_eq!(writer.file, expect);
 
         Ok(())
     }
