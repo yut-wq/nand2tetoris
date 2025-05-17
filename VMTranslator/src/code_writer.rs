@@ -63,7 +63,14 @@ impl CodeWriter {
                         bin_codes.push_str("A=D\n");
                         bin_codes.push_str("D=M\n");
                     }
-                    "pointer" => todo!(),
+                    "pointer" => {
+                        match index {
+                            0 => bin_codes.push_str("@THIS\n"),
+                            1 => bin_codes.push_str("@THAT\n"),
+                            _ => return,
+                        }
+                        bin_codes.push_str("D=M\n");
+                    }
                     "temp" => todo!(),
                     _ => return,
                 };
@@ -205,6 +212,26 @@ D=M
 @4
 D=D+A
 A=D
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+";
+
+        assert_eq!(writer.file, expect);
+
+        Ok(())
+    }
+
+    #[test]
+    fn push_pointer_1() -> Result<(), Box<dyn std::error::Error>> {
+        let mut writer = CodeWriter {
+            file: String::new(),
+        };
+        writer.write_push_pop(CommandType::Push, "pointer", 1);
+        let expect = r"@THAT
 D=M
 @SP
 A=M
