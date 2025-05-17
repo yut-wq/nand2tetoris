@@ -18,7 +18,6 @@ impl CodeWriter {
     }
 
     pub fn write_push_pop(&mut self, command: CommandType, segment: &str, index: u32) {
-        let mut bin_codes = String::new();
         match command {
             CommandType::Arithmetic
             | CommandType::Label
@@ -28,69 +27,74 @@ impl CodeWriter {
             | CommandType::Return
             | CommandType::Call => (),
             CommandType::Push => {
-                match segment {
-                    "argument" => {
-                        bin_codes.push_str("@ARG\n");
-                        bin_codes.push_str("D=M\n");
-                        bin_codes.push_str(&format!("@{}\n", index));
-                        bin_codes.push_str("D=D+A\n");
-                        bin_codes.push_str("A=D\n");
-                        bin_codes.push_str("D=M\n");
-                    }
-                    "local" => {
-                        bin_codes.push_str("@LCL\n");
-                        bin_codes.push_str("D=M\n");
-                        bin_codes.push_str(&format!("@{}\n", index));
-                        bin_codes.push_str("D=D+A\n");
-                        bin_codes.push_str("A=D\n");
-                        bin_codes.push_str("D=M\n");
-                    }
-                    "static" => {
-                        bin_codes.push_str(&format!("@{}.{}\n",self.file_name, index));
-                        bin_codes.push_str("D=M\n");
-                    }
-                    "constant" => {
-                        bin_codes.push_str(&format!("@{}\n", index));
-                        bin_codes.push_str("D=A\n");
-                    }
-                    "this" => {
-                        bin_codes.push_str("@THIS\n");
-                        bin_codes.push_str("D=M\n");
-                        bin_codes.push_str(&format!("@{}\n", index));
-                        bin_codes.push_str("D=D+A\n");
-                        bin_codes.push_str("A=D\n");
-                        bin_codes.push_str("D=M\n");
-                    }
-                    "that" => {
-                        bin_codes.push_str("@THAT\n");
-                        bin_codes.push_str("D=M\n");
-                        bin_codes.push_str(&format!("@{}\n", index));
-                        bin_codes.push_str("D=D+A\n");
-                        bin_codes.push_str("A=D\n");
-                        bin_codes.push_str("D=M\n");
-                    }
-                    "pointer" => {
-                        match index {
-                            0 => bin_codes.push_str("@THIS\n"),
-                            1 => bin_codes.push_str("@THAT\n"),
-                            _ => return,
-                        }
-                        bin_codes.push_str("D=M\n");
-                    }
-                    "temp" => {
-                        bin_codes.push_str(&format!("@{}\n", index + 5));
-                        bin_codes.push_str("D=M\n");
-                    }
-                    _ => return,
-                };
-
-                let push_codes = push_data_register();
-                bin_codes.push_str(&push_codes);
-
+                let bin_codes = self.generate_push_codes(segment, index);
                 self.file.write_str(&bin_codes).unwrap();
             }
             CommandType::Pop => todo!(),
         }
+    }
+
+    fn generate_push_codes(&self, segment: &str, index: u32) -> String {
+        let mut bin_codes = String::new();
+        match segment {
+            "argument" => {
+                bin_codes.push_str("@ARG\n");
+                bin_codes.push_str("D=M\n");
+                bin_codes.push_str(&format!("@{}\n", index));
+                bin_codes.push_str("D=D+A\n");
+                bin_codes.push_str("A=D\n");
+                bin_codes.push_str("D=M\n");
+            }
+            "local" => {
+                bin_codes.push_str("@LCL\n");
+                bin_codes.push_str("D=M\n");
+                bin_codes.push_str(&format!("@{}\n", index));
+                bin_codes.push_str("D=D+A\n");
+                bin_codes.push_str("A=D\n");
+                bin_codes.push_str("D=M\n");
+            }
+            "static" => {
+                bin_codes.push_str(&format!("@{}.{}\n", self.file_name, index));
+                bin_codes.push_str("D=M\n");
+            }
+            "constant" => {
+                bin_codes.push_str(&format!("@{}\n", index));
+                bin_codes.push_str("D=A\n");
+            }
+            "this" => {
+                bin_codes.push_str("@THIS\n");
+                bin_codes.push_str("D=M\n");
+                bin_codes.push_str(&format!("@{}\n", index));
+                bin_codes.push_str("D=D+A\n");
+                bin_codes.push_str("A=D\n");
+                bin_codes.push_str("D=M\n");
+            }
+            "that" => {
+                bin_codes.push_str("@THAT\n");
+                bin_codes.push_str("D=M\n");
+                bin_codes.push_str(&format!("@{}\n", index));
+                bin_codes.push_str("D=D+A\n");
+                bin_codes.push_str("A=D\n");
+                bin_codes.push_str("D=M\n");
+            }
+            "pointer" => {
+                match index {
+                    0 => bin_codes.push_str("@THIS\n"),
+                    1 => bin_codes.push_str("@THAT\n"),
+                    _ => return String::new(),
+                }
+                bin_codes.push_str("D=M\n");
+            }
+            "temp" => {
+                bin_codes.push_str(&format!("@{}\n", index + 5));
+                bin_codes.push_str("D=M\n");
+            }
+            _ => return String::new(),
+        };
+
+        let push_codes = push_data_register();
+        bin_codes.push_str(&push_codes);
+        bin_codes
     }
 
     /// 算術コマンドに対する書き込み処理
