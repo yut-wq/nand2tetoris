@@ -27,19 +27,19 @@ impl CodeWriter {
                 match segment {
                     "argument" => {
                         bin_codes.push_str("@ARG\n");
-                        bin_codes.push_str("D=A\n");
+                        bin_codes.push_str("D=M\n");
                         bin_codes.push_str(&format!("@{}\n", index));
                         bin_codes.push_str("D=D+A\n");
                         bin_codes.push_str("A=D\n");
                         bin_codes.push_str("D=M\n");
                     }
                     "local" => {
-                        // Dレジスタにxの値を置く
-                        bin_codes.push_str("@LCL");
-                        bin_codes.push_str("D=M");
-                        bin_codes.push_str(&format!("@{}", index));
-                        bin_codes.push_str("A=D+A");
-                        bin_codes.push_str("D=M");
+                        bin_codes.push_str("@LCL\n");
+                        bin_codes.push_str("D=M\n");
+                        bin_codes.push_str(&format!("@{}\n", index));
+                        bin_codes.push_str("D=D+A\n");
+                        bin_codes.push_str("A=D\n");
+                        bin_codes.push_str("D=M\n");
                     }
                     "static" => todo!(),
                     "constant" => {
@@ -115,8 +115,32 @@ M=M+1
         };
         writer.write_push_pop(CommandType::Push, "argument", 1);
         let expect = r"@ARG
-D=A
+D=M
 @1
+D=D+A
+A=D
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+";
+
+        assert_eq!(writer.file, expect);
+
+        Ok(())
+    }
+
+    #[test]
+    fn push_local_2() -> Result<(), Box<dyn std::error::Error>> {
+        let mut writer = CodeWriter {
+            file: String::new(),
+        };
+        writer.write_push_pop(CommandType::Push, "local", 2);
+        let expect = r"@LCL
+D=M
+@2
 D=D+A
 A=D
 D=M
