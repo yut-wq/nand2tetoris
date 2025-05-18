@@ -203,13 +203,33 @@ impl CodeWriter {
                 self.file.push_str("@SP\n");
                 self.file.push_str("A=M\n");
                 self.file.push_str("D=M\n");
-                // データレジスタの値をR14に格納
+                // 加算処理
                 self.file.push_str("@R14\n");
                 self.file.push_str("D=D+M\n");
 
                 self.file.push_str(&push_data_register());
             }
-            "sub" => todo!(),
+            "sub" => {
+                self.file.push_str(&decrement_sp());
+                // スタックポインタの値を取得
+                self.file.push_str("@SP\n");
+                self.file.push_str("A=M\n");
+                self.file.push_str("D=M\n");
+                // データレジスタの値をR14に格納
+                self.file.push_str("@R14\n");
+                self.file.push_str("M=D\n");
+
+                self.file.push_str(&decrement_sp());
+                // スタックポインタの値を取得
+                self.file.push_str("@SP\n");
+                self.file.push_str("A=M\n");
+                self.file.push_str("D=M\n");
+                // 減算処理
+                self.file.push_str("@R14\n");
+                self.file.push_str("D=M-D\n");
+
+                self.file.push_str(&push_data_register());
+            }
             "neg" => todo!(),
             "eq" => todo!(),
             "gt" => todo!(),
@@ -706,6 +726,39 @@ A=M
 D=M
 @R14
 D=D+M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+";
+
+        assert_eq!(writer.file, expect);
+
+        Ok(())
+    }
+
+    #[test]
+    fn command_sub_test() -> Result<(), Box<dyn std::error::Error>> {
+        let mut writer = CodeWriter {
+            file: String::new(),
+            file_name: String::new(),
+        };
+        writer.write_arithmetic("sub");
+        let expect = r"@SP
+M=M-1
+@SP
+A=M
+D=M
+@R14
+M=D
+@SP
+M=M-1
+@SP
+A=M
+D=M
+@R14
+D=M-D
 @SP
 A=M
 M=D
