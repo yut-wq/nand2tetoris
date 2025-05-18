@@ -187,6 +187,38 @@ impl CodeWriter {
 
     /// 算術コマンドに対する書き込み処理
     pub fn write_arithmetic(&mut self, command: &str) {
+        match command {
+            "add" => {
+                self.file.push_str(&decrement_sp());
+                // スタックポインタの値を取得
+                self.file.push_str("@SP\n");
+                self.file.push_str("A=M\n");
+                self.file.push_str("D=M\n");
+                // データレジスタの値をR14に格納
+                self.file.push_str("@R14\n");
+                self.file.push_str("M=D\n");
+
+                self.file.push_str(&decrement_sp());
+                // スタックポインタの値を取得
+                self.file.push_str("@SP\n");
+                self.file.push_str("A=M\n");
+                self.file.push_str("D=M\n");
+                // データレジスタの値をR14に格納
+                self.file.push_str("@R14\n");
+                self.file.push_str("D=D+M\n");
+
+                self.file.push_str(&push_data_register());
+            }
+            "sub" => todo!(),
+            "neg" => todo!(),
+            "eq" => todo!(),
+            "gt" => todo!(),
+            "lt" => todo!(),
+            "and" => todo!(),
+            "or" => todo!(),
+            "not" => todo!(),
+            _ => (),
+        }
         // pop
         // pop
         // 加算
@@ -646,6 +678,39 @@ D=M
 @R13
 A=M
 M=D
+";
+
+        assert_eq!(writer.file, expect);
+
+        Ok(())
+    }
+
+    #[test]
+    fn command_add_test() -> Result<(), Box<dyn std::error::Error>> {
+        let mut writer = CodeWriter {
+            file: String::new(),
+            file_name: String::new(),
+        };
+        writer.write_arithmetic("add");
+        let expect = r"@SP
+M=M-1
+@SP
+A=M
+D=M
+@R14
+M=D
+@SP
+M=M-1
+@SP
+A=M
+D=M
+@R14
+D=D+M
+@SP
+A=M
+M=D
+@SP
+M=M+1
 ";
 
         assert_eq!(writer.file, expect);
