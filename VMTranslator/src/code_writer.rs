@@ -124,7 +124,14 @@ impl CodeWriter {
                 bin_codes.push_str(&assign_sp_to_r13());
             }
             "static" => {}
-            "constant" => {}
+            "constant" => {
+                bin_codes.push_str(&decrement_sp());
+                bin_codes.push_str(&format!("@{}\n", index));
+                bin_codes.push_str("D=A\n");
+                bin_codes.push_str("@R13\n");
+                bin_codes.push_str("M=D\n");
+                bin_codes.push_str(&assign_sp_to_r13());
+            }
             "this" => {
                 bin_codes.push_str(&decrement_sp());
                 bin_codes.push_str("@THIS\n");
@@ -572,6 +579,32 @@ M=D
 M=M-1
 @12
 D=M
+@R13
+M=D
+@SP
+A=M
+D=M
+@R13
+A=M
+M=D
+";
+
+        assert_eq!(writer.file, expect);
+
+        Ok(())
+    }
+
+    #[test]
+    fn pop_constant_99() -> Result<(), Box<dyn std::error::Error>> {
+        let mut writer = CodeWriter {
+            file: String::new(),
+            file_name: String::new(),
+        };
+        writer.write_push_pop(CommandType::Pop, "constant", 99);
+        let expect = r"@SP
+M=M-1
+@99
+D=A
 @R13
 M=D
 @SP
