@@ -230,7 +230,16 @@ impl CodeWriter {
 
                 self.file.push_str(&push_data_register());
             }
-            "neg" => todo!(),
+            "neg" => {
+                self.file.push_str(&decrement_sp());
+                // スタックポインタの値を取得
+                self.file.push_str("@SP\n");
+                self.file.push_str("A=M\n");
+                // negの処理
+                self.file.push_str("D=-M\n");
+
+                self.file.push_str(&push_data_register());
+            }
             "eq" => todo!(),
             "gt" => todo!(),
             "lt" => todo!(),
@@ -759,6 +768,30 @@ A=M
 D=M
 @R14
 D=M-D
+@SP
+A=M
+M=D
+@SP
+M=M+1
+";
+
+        assert_eq!(writer.file, expect);
+
+        Ok(())
+    }
+
+    #[test]
+    fn command_neg_test() -> Result<(), Box<dyn std::error::Error>> {
+        let mut writer = CodeWriter {
+            file: String::new(),
+            file_name: String::new(),
+        };
+        writer.write_arithmetic("neg");
+        let expect = r"@SP
+M=M-1
+@SP
+A=M
+D=-M
 @SP
 A=M
 M=D
